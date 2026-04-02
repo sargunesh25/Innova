@@ -64,14 +64,14 @@ const Dashboard = () => {
       <div className="dashboard-layout">
         {/* Left Column */}
         <div className="dashboard-left">
-          
+
           {/* Active Challenges */}
           <section className="dashboard-section card-box">
             <div className="section-header-row">
               <h2>Active Challenges</h2>
               <a href="/challenges" className="header-link">BROWSE DIRECTORY</a>
             </div>
-            
+
             <div className="active-challenge-item">
               <div className="ac-header">
                 <div>
@@ -81,7 +81,7 @@ const Dashboard = () => {
                 <div className="ac-tag">2 DAYS LEFT</div>
               </div>
               <div className="ac-progress">
-                <div className="progress-bar-bg"><div className="progress-bar-fill" style={{width: '75%'}}></div><div className="progress-dot" style={{left: '75%'}}></div></div>
+                <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '75%' }}></div><div className="progress-dot" style={{ left: '75%' }}></div></div>
               </div>
               <div className="ac-footer">
                 <span>RESEARCH PHASE</span>
@@ -98,7 +98,7 @@ const Dashboard = () => {
                 <div className="ac-tag">14 DAYS LEFT</div>
               </div>
               <div className="ac-progress">
-                <div className="progress-bar-bg"><div className="progress-bar-fill" style={{width: '32%'}}></div><div className="progress-dot" style={{left: '32%'}}></div></div>
+                <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '32%' }}></div><div className="progress-dot" style={{ left: '32%' }}></div></div>
               </div>
               <div className="ac-footer">
                 <span>IDEATION PHASE</span>
@@ -110,12 +110,12 @@ const Dashboard = () => {
           {/* Featured Opportunities */}
           <section className="dashboard-section">
             <h2 className="section-title">Featured Opportunities</h2>
-            
+
             <div className="featured-card large-featured">
-              <div className="featured-image" style={{backgroundImage: `url(/quantum.png)`}}></div>
+              <div className="featured-image" style={{ backgroundImage: `url(/quantum.png)` }}></div>
               <div className="featured-content">
                 <span className="feat-pill dark">HIGH STAKES</span>
-                <h3>Quantum Encryption<br/>Protocols for 2030</h3>
+                <h3>Quantum Encryption<br />Protocols for 2030</h3>
                 <p>Propose a hardware-level encryption standard for the next generation of secure communication. Submissions require technical whitepapers.</p>
                 <div className="feat-footer">
                   <span className="feat-price">₹15,000</span>
@@ -126,7 +126,7 @@ const Dashboard = () => {
 
             <div className="featured-card-row">
               <div className="featured-subcard">
-                <div className="subcard-image" style={{backgroundImage: `url(/forest.png)`}}></div>
+                <div className="subcard-image" style={{ backgroundImage: `url(/forest.png)` }}></div>
                 <div className="subcard-content">
                   <span className="feat-pill light">ECO FOCUS</span>
                   <h4>Carbon Capture in Arid Climates</h4>
@@ -139,7 +139,7 @@ const Dashboard = () => {
 
               <div className="featured-subcard solid-bg">
                 <div className="subcard-text-hero">
-                  <em>New Research: The Future<br/>of Biotech</em>
+                  <em>New Research: The Future<br />of Biotech</em>
                 </div>
                 <div className="subcard-content">
                   <span className="feat-pill light">LABORATORY</span>
@@ -157,7 +157,7 @@ const Dashboard = () => {
 
         {/* Right Column */}
         <div className="dashboard-right">
-          
+
           {/* Journal Log */}
           <div className="dashboard-widget card-box">
             <h2 className="widget-title">Journal Log</h2>
@@ -165,14 +165,14 @@ const Dashboard = () => {
               <li>
                 <div className="timeline-dot"></div>
                 <div className="timeline-content">
-                  <p><strong>Elena Vance</strong> upvoted your idea in <em>Urban<br/>Mobility</em>.</p>
+                  <p><strong>Elena Vance</strong> upvoted your idea in <em>Urban<br />Mobility</em>.</p>
                   <span className="timeline-time">2 HOURS AGO</span>
                 </div>
               </li>
               <li>
                 <div className="timeline-empty"></div>
                 <div className="timeline-content">
-                  <p>Your submission reached the <strong>Semi-Finals</strong><br/>round in Ethics.</p>
+                  <p>Your submission reached the <strong>Semi-Finals</strong><br />round in Ethics.</p>
                   <span className="timeline-time">5 HOURS AGO</span>
                 </div>
               </li>

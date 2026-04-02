@@ -190,7 +190,7 @@ const Challenges = () => {
 
       <div className="challenges-content">
         <div className="challenges-main">
-          <div className="challenges-grid">
+          <div className={`challenges-grid ${filteredChallenges.length === 0 ? 'empty' : ''}`}>
             {filteredChallenges.length > 0 ? filteredChallenges.map((challenge, index) => (
               <Link to={`/challenge/${index + 1}`} key={index} className="challenge-card-link">
                 <div className="challenge-card">
@@ -220,9 +220,9 @@ const Challenges = () => {
                 </div>
               </Link>
             )) : (
-              <div style={{ padding: '3rem', textAlign: 'center', gridColumn: '1 / -1', color: 'var(--text-secondary)' }}>
+              <div className="no-challenges-message">
                 <p>No challenges match your exact filter criteria.</p>
-                <button className="outline-btn mt-2" onClick={() => { setSearchQuery(''); setSelectedPill('All Items'); }}>Clear Filters</button>
+                <button className="primary-btn clear-btn" onClick={() => { setSearchQuery(''); setSelectedPill('All Items'); }}>Clear Filters</button>
               </div>
             )}
           </div>

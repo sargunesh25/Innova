@@ -108,6 +108,48 @@
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 3rem;
+  transition: all 0.3s ease;
+}
+
+.challenges-grid.empty {
+  display: block; /* Remove grid to allow the empty message to center normally */
+  min-height: 480px; /* Force minimum height to prevent scrollbar jumping */
+}
+
+.no-challenges-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background-color: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  text-align: center;
+  height: 100%;
+  min-height: 300px;
+  border: 1px dashed var(--border-light);
+}
+
+.no-challenges-message p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.clear-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .challenge-card-link {

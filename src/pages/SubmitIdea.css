@@ -1,0 +1,262 @@
+.submit-page {
+  padding: 4rem 2rem 8rem;
+}
+
+.submit-wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.submit-pills {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.pill-challenge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: transparent;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.pill-square-icon {
+  width: 20px;
+  height: 20px;
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  border-radius: 2px;
+}
+
+.pill-phase {
+  background-color: #f2eefa;
+  color: #6a40bf;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+}
+
+.submit-title {
+  font-size: 3.5rem;
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.submit-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 4rem;
+}
+
+.submit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form-sublabel {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background-color: var(--bg-white);
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: #c0beb1;
+}
+
+.form-input:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--brand-green);
+}
+
+.form-textarea {
+  resize: vertical;
+}
+
+.form-textarea.large {
+  min-height: 180px;
+}
+
+.form-textarea.medium {
+  min-height: 120px;
+}
+
+.upload-box {
+  border: 1px dashed #c0beb1;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-box:hover {
+  border-color: var(--brand-green);
+  background-color: rgba(18, 53, 36, 0.02);
+}
+
+.upload-icon-wrapper {
+  color: var(--brand-green);
+}
+
+.upload-box p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.upload-box strong {
+  color: var(--text-primary);
+}
+
+/* Skills and Team */
+.skills-team-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.skills-pills, .team-avatars {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.skill-pill {
+  background-color: #d8cfff;
+  color: #532aa8;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+}
+
+.add-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e8e7e2;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+  background-color: #dcdbc6;
+  color: var(--text-primary);
+}
+
+.avatar-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: 2px solid var(--bg-primary);
+  margin-left: -10px;
+}
+
+.avatar-circle:first-child {
+  margin-left: 0;
+}
+
+/* Mock imagery for avatars */
+.img-1 { background-image: url('https://i.pravatar.cc/100?img=5'); background-size: cover; }
+.img-2 { background-image: url('https://i.pravatar.cc/100?img=11'); background-size: cover; }
+
+.form-divider {
+  height: 1px;
+  background-color: var(--border-light);
+  margin: 1rem 0;
+}
+
+.submit-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auto-save-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.save-draft-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.save-draft-btn:hover {
+  text-decoration: underline;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+}

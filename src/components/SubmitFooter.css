@@ -1,0 +1,51 @@
+.submit-footer {
+  width: 100%;
+  background-color: #f7f6f0;
+  border-top: 1px solid var(--border-light);
+  padding: 4rem 0 3rem;
+  margin-top: 4rem;
+}
+
+.submit-footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.submit-footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.submit-footer-left .submit-footer-logo {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.submit-footer-left .submit-footer-tagline {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.submit-footer-right {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.submit-footer-right a:hover {
+  color: var(--text-primary);
+}
+
+.submit-footer-bottom {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #a3a195;
+  letter-spacing: 1px;
+}

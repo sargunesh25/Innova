@@ -1,0 +1,396 @@
+.challenges-page {
+  padding: 4rem 2rem 8rem;
+}
+
+.challenges-header {
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.challenges-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #e8e7e1;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  width: 300px;
+}
+
+.search-icon {
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.category-pills {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.category-pills .pill {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: #e8e7e1;
+  color: var(--text-secondary);
+}
+
+.category-pills .pill.active {
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sort-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+  text-align: right;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Layout */
+.challenges-content {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 3rem;
+  align-items: start;
+}
+
+.challenges-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.challenge-card-link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.challenge-card {
+  background-color: var(--bg-white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid var(--brand-green);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.challenge-card:nth-child(2) {
+  border-top-color: #dfa838;
+}
+
+.challenge-card:nth-child(3) {
+  border-top-color: #6a40bf;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.card-logo-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.card-tags {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.tag-category {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  background-color: #f0f0f0;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.tag-time {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.tag-time.green {
+  background-color: #e5efe9;
+  color: var(--brand-green);
+}
+
+.tag-time.yellow {
+  background-color: #fcf1da;
+  color: #dfa838;
+}
+
+.tag-time.purple {
+  background-color: #ede7fa;
+  color: #6a40bf;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.card-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  min-height: 3.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--border-light);
+  padding-top: 1.5rem;
+  margin-top: auto;
+}
+
+.card-prize {
+  display: flex;
+  flex-direction: column;
+}
+
+.prize-amount {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-green);
+}
+
+.prize-label {
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.status-icon {
+  color: var(--text-secondary);
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+}
+
+.load-more-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  border-color: var(--brand-green);
+  color: var(--brand-green);
+  font-weight: 600;
+}
+
+.load-more-btn:hover {
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+}
+
+/* Sidebar Styles */
+.challenges-sidebar {
+  background-color: var(--bg-primary); /* Uses main bg */
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.filter-group {
+  margin-bottom: 2rem;
+}
+
+.filter-group-title {
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+  padding-left: 28px;
+}
+
+.filter-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-custom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+}
+
+.filter-checkbox:hover input ~ .checkbox-custom {
+  border-color: var(--brand-green);
+}
+
+.filter-checkbox input:checked ~ .checkbox-custom {
+  background-color: var(--bg-white);
+  border: 1px solid var(--text-primary);
+}
+
+.checkbox-custom:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.filter-checkbox input:checked ~ .checkbox-custom:after {
+  display: block;
+}
+
+.filter-checkbox .checkbox-custom:after {
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--text-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.slider-track {
+  height: 4px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.slider-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.phase-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.phase-pill {
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  background-color: var(--bg-white);
+  border: 1px solid transparent;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.phase-pill.active {
+  border-color: var(--brand-green);
+}
+
+.apply-btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}

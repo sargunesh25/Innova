@@ -1,0 +1,18 @@
+.app-container {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-container.auth-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.partners-testimonials {
+  background-color: var(--bg-white);
+  border-radius: 20px;
+  /* Add padding if we want it to look like a separate block,
+     but Partners & Testimonials handle their own vertical flow */
+}

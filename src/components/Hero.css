@@ -1,0 +1,99 @@
+.hero {
+  position: relative;
+  padding: 6rem 0 3rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-content {
+  max-width: 1000px;
+  position: relative;
+  z-index: 10;
+}
+
+.badge {
+  display: inline-block;
+  background-color: #e5efe9;
+  color: var(--brand-green);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: 4.5rem;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 3rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--brand-green);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.hero-btn {
+  padding: 0.8rem 1.75rem;
+  font-size: 1rem;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.outline-btn {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+}
+
+.outline-btn:hover {
+  background-color: rgba(0,0,0,0.03);
+}
+
+.btn-icon {
+  margin-left: 0.25rem;
+}
+
+/* Background effects */
+.hero-background-effects {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.gradient-blob {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(206,230,210,0.6) 0%, rgba(246,245,240,0) 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* Base dot pattern added to root so it can cover both hero and stats */
+body {
+  background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}

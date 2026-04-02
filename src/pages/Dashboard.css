@@ -1,0 +1,538 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.dashboard-container {
+  padding: 2rem 0 6rem;
+}
+
+/* Welcome Banner */
+.welcome-banner {
+  background-color: #f0ead6; /* Warm beige */
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.welcome-text h1 {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 2.2rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.welcome-text p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.welcome-text em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.welcome-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.banner-stat-box {
+  background-color: var(--bg-white);
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.banner-stat-box span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.banner-stat-box strong {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+/* Metrics Row */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.metric-card {
+  background-color: var(--bg-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 110px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  border: 1px solid var(--border-light);
+}
+
+.metric-header {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.metric-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 1rem;
+}
+
+.metric-value {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 2rem;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metric-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.metric-badge {
+  background-color: #d1ebd8;
+  color: #1a6d36;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+}
+
+.text-secondary { color: var(--text-secondary); }
+
+/* Dashboard Layout Grid */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.dashboard-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Common Card Box */
+.card-box {
+  background-color: var(--bg-white);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+}
+
+/* Active Challenges */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.section-header-row h2 {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.4rem;
+}
+
+.header-link {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.active-challenge-item {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 2rem;
+}
+
+.active-challenge-item.last {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.ac-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.ac-header h3 {
+  font-size: 1.1rem;
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  margin-bottom: 0.25rem;
+}
+
+.ac-header p {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.ac-tag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.ac-progress {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 2px;
+  background-color: #eae8de;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--text-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progress-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--text-primary);
+  border-radius: 50%;
+  position: absolute;
+  top: -2px;
+  transform: translateX(-50%);
+}
+
+.ac-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+}
+
+/* Featured Opportunities */
+.section-title {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.featured-card {
+  display: flex;
+  background-color: var(--bg-white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  margin-bottom: 1.5rem;
+}
+
+.large-featured .featured-image {
+  flex: 1.2;
+  background-size: cover;
+  background-position: center;
+  min-height: 280px;
+}
+
+.large-featured .featured-content {
+  flex: 1;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feat-pill {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.feat-pill.dark {
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+}
+
+.feat-pill.light {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.featured-content h3 {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.featured-content p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.feat-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.feat-price {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.apply-btn {
+  padding: 0.6rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.featured-card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.featured-subcard {
+  background-color: var(--bg-white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.subcard-image {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+}
+
+.subcard-text-hero {
+  height: 140px;
+  background-color: #d1ebd8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.subcard-text-hero em {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--brand-green);
+  line-height: 1.3;
+}
+
+.subcard-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.subcard-content h4 {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.05rem;
+  margin-bottom: 3rem;
+}
+
+.subcard-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feat-price-small {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.feat-stat {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+}
+
+
+/* Right Column */
+.widget-title {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* Journal Log */
+.journal-timeline {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.journal-timeline li {
+  display: flex;
+  gap: 1rem;
+}
+
+.timeline-dot {
+  width: 4px;
+  height: 4px;
+  background-color: var(--text-primary);
+  border-radius: 50%;
+  margin-top: 0.5rem;
+}
+
+.timeline-empty {
+  width: 4px;
+  height: 4px;
+  background-color: transparent;
+  margin-top: 0.5rem;
+}
+
+.timeline-content p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-content strong {
+  color: var(--text-primary);
+}
+
+.timeline-time {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #b3b1a8;
+  text-transform: uppercase;
+}
+
+/* Fellowship Rankings */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ranking-item.highlight-card {
+  background-color: #e5f2e8; /* Soft green */
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+.rank-num {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-style: italic;
+  font-size: 1rem;
+  width: 16px;
+  color: var(--text-primary);
+}
+
+.rank-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.rank-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.rank-info strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.rank-info span {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.highlight-card .rank-info span {
+  color: #5c7562;
+}
+
+.rank-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.3rem 0.6rem;
+  background-color: var(--bg-white);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.rank-icon {
+  color: var(--text-secondary);
+}

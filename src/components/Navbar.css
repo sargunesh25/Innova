@@ -1,0 +1,89 @@
+.navbar-wrapper {
+  width: 100%;
+  background-color: transparent;
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.nav-logo a {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  position: relative;
+  padding-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+.nav-links a.active {
+  color: var(--text-primary);
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--brand-green);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.icon-btn {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+}
+
+.text-btn {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.primary-btn {
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+  padding: 0.6rem 1.25rem;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+}

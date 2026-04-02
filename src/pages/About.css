@@ -1,0 +1,47 @@
+.about-page {
+  padding: 4rem 2rem 8rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-header .page-title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.about-header .page-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.about-section {
+  background-color: var(--bg-white);
+  padding: 3rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--brand-green);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.about-section .section-title {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.about-section .section-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}

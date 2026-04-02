@@ -1,0 +1,71 @@
+.timeline {
+  padding: 6rem 0;
+  text-align: center;
+}
+
+.timeline-title {
+  font-size: 2.5rem;
+  margin-bottom: 5rem;
+}
+
+.timeline-track-container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 32px; /* half of circle height */
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background-color: var(--border-light);
+  z-index: 0;
+}
+
+.timeline-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+}
+
+.step-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--bg-white);
+  color: var(--brand-green);
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+}
+
+.step-circle.active {
+  background-color: var(--brand-green);
+  color: var(--bg-white);
+}
+
+.step-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.step-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}

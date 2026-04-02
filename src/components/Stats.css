@@ -1,0 +1,28 @@
+.stats {
+  padding: 4rem 0 8rem;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--brand-green);
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}

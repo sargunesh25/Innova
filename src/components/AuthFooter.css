@@ -1,0 +1,41 @@
+.auth-footer {
+  width: 100%;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  margin-top: auto;
+}
+
+.auth-footer-logo {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-weight: 700;
+  color: var(--brand-green);
+  font-size: 1rem;
+}
+
+.auth-footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.auth-footer-links a {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.auth-footer-links a:hover {
+  color: var(--text-primary);
+}
+
+.auth-footer-copy {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}

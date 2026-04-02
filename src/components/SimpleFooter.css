@@ -1,0 +1,33 @@
+.simple-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 3rem 0;
+  border-top: 1px solid var(--border-light);
+  margin-top: 2rem;
+}
+
+.simple-footer-logo {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.simple-footer-copy {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.simple-footer-right {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.simple-footer-right a:hover {
+  color: var(--text-primary);
+}

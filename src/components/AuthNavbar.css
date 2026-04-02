@@ -1,0 +1,34 @@
+.auth-navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: transparent;
+}
+
+.auth-nav-logo {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-green);
+  text-decoration: none;
+}
+
+.auth-nav-actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.auth-nav-actions .text-btn {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.auth-nav-actions .text-btn:hover {
+  color: var(--text-primary);
+}

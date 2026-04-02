@@ -1,0 +1,355 @@
+.profile-container {
+  padding: 2rem 0 6rem;
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+}
+
+/* Banner */
+.profile-banner {
+  background-color: #121813;
+  border-radius: 24px;
+  padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 1;
+}
+
+.avatar-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  padding: 4px;
+  background: transparent;
+  box-shadow: 0 0 0 2px #4fc4a7, 0 0 16px rgba(79, 196, 167, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-info h1 {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+  color: #fff;
+}
+
+.profile-title {
+  color: #a0a6a1;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.badge-pill {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.badge-pill.elite {
+  background-color: #153e26;
+  color: #8cebc3;
+}
+
+.badge-pill.mentor {
+  background-color: #2b1a45;
+  color: #b78ef5;
+}
+
+.edit-profile-btn {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.6rem 1.25rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.edit-profile-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* Stats Row */
+.profile-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.profile-stat-card {
+  background-color: #f6f5f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.p-stat-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #92958f;
+  text-transform: uppercase;
+}
+
+.p-stat-value {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  color: #5c7e68;
+}
+
+/* Layout */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+}
+
+/* Left Column: Submission History */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1rem;
+}
+
+.history-header h2 {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 1.6rem;
+}
+
+.history-filters {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.filter-tab {
+  background: none;
+  border: none;
+  padding: 0 0 1rem 0;
+  margin-bottom: -1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+}
+
+.filter-tab.active {
+  color: var(--text-primary);
+}
+
+.filter-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--brand-green);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.history-card {
+  background-color: var(--bg-white);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.hc-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hc-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: #ededed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+.hc-info h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.hc-date {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+}
+
+.hc-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hc-status {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+}
+
+.status-won {
+  background-color: #d1ebd8;
+  color: #1a6d36;
+}
+
+.status-review {
+  background-color: #e6e5e0;
+  color: #7a7974;
+}
+
+.status-finalist {
+  background-color: #e6e5e0;
+  color: #7a7974;
+}
+
+.hc-prize {
+  font-family: 'Google Sans', 'Roboto', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #a6aba8;
+  width: 80px;
+  text-align: right;
+}
+
+/* Right Column: Metadata Sidebar */
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-top: 1rem;
+}
+
+.sidebar-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #92958f;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+/* Reputation Bars */
+.rep-bar-group {
+  margin-bottom: 1.25rem;
+}
+
+.rep-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.rep-bar-bg {
+  width: 100%;
+  height: 4px;
+  background-color: #e6e5e0;
+  border-radius: 2px;
+}
+
+.rep-bar-fill {
+  height: 100%;
+  background-color: var(--brand-green);
+  border-radius: 2px;
+}
+
+/* Domain Expertise */
+.expertise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.expertise-tag {
+  background-color: #f1edfb;
+  color: #5527a8;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+}
+
+/* Unlocked Achievements */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.ach-box {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ach-box.unlocked {
+  background-color: #f6f5f0;
+}
+
+.ach-box.locked {
+  background-color: #fdfcf9;
+  border: 1px dashed #e6e5e0;
+  opacity: 0.5;
+}

@@ -158,3 +158,27 @@
 .auth-terms a:hover {
   color: var(--text-primary);
 }
+
+.role-flat-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.role-flat-btn {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.2s;
+}
+
+.role-flat-btn.active {
+  border-color: #124128;
+  color: #124128;
+}

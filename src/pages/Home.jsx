@@ -1,6 +1,5 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import Stats from '../components/Stats';
 import Features from '../components/Features';
 import Timeline from '../components/Timeline';
 import Partners from '../components/Partners';
@@ -10,7 +9,6 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <Stats />
       <Features />
       <Timeline />
       <div className="partners-testimonials">

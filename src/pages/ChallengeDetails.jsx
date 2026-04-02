@@ -42,7 +42,7 @@ const ChallengeDetails = () => {
             </div>
           </div>
 
-          <details className="description-dropdown" open>
+          <details className="description-dropdown">
             <summary className="description-summary">
               <h2 className="description-title">Description</h2>
               <ChevronDown size={28} className="dropdown-icon" />

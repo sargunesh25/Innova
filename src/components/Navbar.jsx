@@ -15,7 +15,6 @@ const Navbar = () => {
         </div>
         <ul className="nav-links">
         <li><Link to="/" className={path === '/' ? 'active' : ''}>Discover</Link></li>
-        <li><a href="#">Archive</a></li>
         <li><Link to="/challenges" className={path.startsWith('/challenge') ? 'active' : ''}>Challenges</Link></li>
         <li><Link to="/about" className={path === '/about' ? 'active' : ''}>About</Link></li>
       </ul>

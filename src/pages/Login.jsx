@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AlignLeft, Building2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Join.css'; // Reusing the Auth styles
 
@@ -21,21 +22,27 @@ const Login = () => {
         <h1 className="auth-title">Welcome back</h1>
         <p className="auth-subtitle">Continue your journey with the collective.</p>
 
-        <div className="role-flat-toggle">
-          <button 
-            type="button"
-            className={`role-flat-btn ${loginRole === 'solver' ? 'active' : ''}`}
+        <div className="auth-type-selector">
+          <div 
+            className={`auth-type-card ${loginRole === 'solver' ? 'selected' : ''}`}
             onClick={() => setLoginRole('solver')}
           >
-            Solver
-          </button>
-          <button 
-            type="button"
-            className={`role-flat-btn ${loginRole === 'company' ? 'active' : ''}`}
+            <AlignLeft className="auth-type-icon" size={20} />
+            <div className="auth-type-info">
+              <strong>Researcher</strong>
+              <span>MEMBER</span>
+            </div>
+          </div>
+          <div 
+            className={`auth-type-card ${loginRole === 'company' ? 'selected' : ''}`}
             onClick={() => setLoginRole('company')}
           >
-            Enterprise
-          </button>
+            <Building2 className="auth-type-icon" size={20} />
+            <div className="auth-type-info">
+              <strong>Company</strong>
+              <span>PARTNER</span>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

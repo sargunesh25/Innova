@@ -1,8 +1,30 @@
 import React from 'react';
-import { Plus, ArrowRight, BookOpen } from 'lucide-react';
+import { Plus, ArrowRight, BookOpen, Loader2 } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './CompanyDashboard.css';
 
 const CompanyDashboard = () => {
+  const { isLoading, error, companyProfile, companyMetrics, operationalLedger } = useDashboardInfo();
+
+  if (isLoading || !companyProfile || !companyMetrics) {
+    return (
+      <div className="company-dashboard" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loader2 size={48} color="#1a6d36" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>INITIALIZING ENTERPRISE DASHBOARD...</p>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="company-dashboard" style={{ textAlign: 'center', padding: '4rem' }}>
+        <h2 style={{ color: '#d9534f' }}>Connection Error</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="company-dashboard">
       
@@ -10,14 +32,13 @@ const CompanyDashboard = () => {
       <div className="cd-header container">
         <div className="cd-header-left">
           <div className="company-logo-block">
-             {/* Simple visual SVG or block */}
              <div className="cd-logo-standin">
                 <div className="cd-logo-leaf">&#127807;</div>
-                <span>COMPANY</span>
+                <span>{companyProfile.logoText}</span>
              </div>
           </div>
           <div className="company-title-info">
-            <h1>Innova Systems <span className="cd-section-badge">SECTION 02</span></h1>
+            <h1>{companyProfile.name} <span className="cd-section-badge">SECTION 02</span></h1>
             <p>ENTERPRISE INNOVATION DASHBOARD & ARCHIVE</p>
           </div>
         </div>
@@ -34,7 +55,7 @@ const CompanyDashboard = () => {
           <div className="cd-metric-card light-card">
             <span className="cd-metric-label">REGISTERED USERS</span>
             <div className="cd-metric-data">
-              <span className="cd-metric-number">1,284 <small>+12%</small></span>
+              <span className="cd-metric-number">{companyMetrics.registeredUsers.count} <small>{companyMetrics.registeredUsers.trend}</small></span>
               <div className="cd-metric-chart-bars">
                  <div className="cd-bar b1"></div>
                  <div className="cd-bar b2"></div>
@@ -49,17 +70,17 @@ const CompanyDashboard = () => {
           <div className="cd-metric-card light-card">
             <span className="cd-metric-label">CHALLENGES</span>
             <div className="cd-metric-data">
-              <span className="cd-metric-number">12<br/><small className="sub-line">ACTIVE OF 42 TOTAL</small></span>
+              <span className="cd-metric-number">{companyMetrics.challenges.active}<br/><small className="sub-line">ACTIVE OF {companyMetrics.challenges.total} TOTAL</small></span>
               <div className="cd-circular-chart">
                 <svg viewBox="0 0 36 36" className="circular-chart green">
                   <path className="circle-bg"
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   />
                   <path className="circle"
-                    strokeDasharray="28, 100"
+                    strokeDasharray={`${companyMetrics.challenges.percentage}, 100`}
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   />
-                  <text x="18" y="20.35" className="percentage">28%</text>
+                  <text x="18" y="20.35" className="percentage">{companyMetrics.challenges.percentage}%</text>
                 </svg>
               </div>
             </div>
@@ -68,7 +89,7 @@ const CompanyDashboard = () => {
           <div className="cd-metric-card light-card">
             <span className="cd-metric-label">SUBMISSION VELOCITY</span>
             <div className="cd-metric-data">
-              <span className="cd-metric-number">84.2 <small className="sub-line">DAILY AVG</small></span>
+              <span className="cd-metric-number">{companyMetrics.submissionVelocity.average} <small className="sub-line">DAILY AVG</small></span>
               <div className="cd-sparkline">
                 <div className="spark s1"></div>
                 <div className="spark s2"></div>
@@ -85,7 +106,7 @@ const CompanyDashboard = () => {
             <div className="prize-icon-bg"></div>
             <span className="cd-metric-label">TOTAL PRIZE POOL</span>
             <div className="cd-metric-data">
-              <span className="cd-metric-number prize-number">$2.4M<br/><small className="sub-line">COMMITTED CAPITAL FY24</small></span>
+              <span className="cd-metric-number prize-number">{companyMetrics.prizePool.total}<br/><small className="sub-line">{companyMetrics.prizePool.subtitle}</small></span>
             </div>
           </div>
         </div>
@@ -114,50 +135,39 @@ const CompanyDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><span className="cd-status active"><span className="dot"></span>ACTIVE</span></td>
-                <td>
-                  <span className="ledger-title">Neural Pathway Mapping v.2</span>
-                  <span className="ledger-sec">SECT: BIO-TECHNICAL ENG.</span>
-                </td>
-                <td>
-                   <div className="volume-col">
-                     <span>124</span>
-                     <div className="vol-bar"><div className="vol-fill" style={{width:'80%'}}></div></div>
-                   </div>
-                </td>
-                <td><span className="ledger-date">24.OCT.24</span></td>
-                <td><button className="ledger-action-btn">VIEW DOSSIER <ArrowRight size={14}/></button></td>
-              </tr>
-              <tr>
-                <td><span className="cd-status review"><span className="dot"></span>REVIEW</span></td>
-                <td>
-                  <span className="ledger-title">Sub-Surface Mineral Scanners</span>
-                  <span className="ledger-sec">SECT: RESOURCE MANAGEMENT</span>
-                </td>
-                <td>
-                   <div className="volume-col">
-                     <span>48</span>
-                     <div className="vol-bar"><div className="vol-fill warning" style={{width:'40%'}}></div></div>
-                   </div>
-                </td>
-                <td><span className="ledger-date">12.SEP.24</span></td>
-                <td><button className="ledger-action-btn dark">ASSESS <BookOpen size={14}/></button></td>
-              </tr>
-              <tr>
-                <td><span className="cd-status closed"><span className="dot"></span>CLOSED</span></td>
-                <td>
-                  <span className="ledger-title mute">Quantum Cryptography Standards</span>
-                  <span className="ledger-sec">SECT: INFO SECURITY</span>
-                </td>
-                <td>
-                   <div className="volume-col mute">
-                     <span>312</span>
-                   </div>
-                </td>
-                <td><span className="ledger-date mute">FINALIZED</span></td>
-                <td><button className="ledger-action-btn mute-btn">ARCHIVE</button></td>
-              </tr>
+              {operationalLedger.map((item) => (
+                <tr key={item.id}>
+                  <td>
+                    <span className={`cd-status ${item.status}`}>
+                      <span className="dot"></span>{item.status.toUpperCase()}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`ledger-title ${item.status === 'closed' ? 'mute' : ''}`}>{item.title}</span>
+                    <span className="ledger-sec">SECT: {item.section}</span>
+                  </td>
+                  <td>
+                    <div className={`volume-col ${item.status === 'closed' ? 'mute' : ''}`}>
+                      <span>{item.volumeCount}</span>
+                      {item.volumePercent && (
+                        <div className="vol-bar">
+                          <div className={`vol-fill ${item.isWarning ? 'warning' : ''}`} style={{ width: `${item.volumePercent}%` }}></div>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`ledger-date ${item.status === 'closed' ? 'mute' : ''}`}>{item.deadline}</span>
+                  </td>
+                  <td>
+                    <button className={`ledger-action-btn ${item.status === 'review' ? 'dark' : ''} ${item.status === 'closed' ? 'mute-btn' : ''}`}>
+                      {item.actionType === 'view' && <>VIEW DOSSIER <ArrowRight size={14} /></>}
+                      {item.actionType === 'assess' && <>ASSESS <BookOpen size={14} /></>}
+                      {item.actionType === 'archive' && 'ARCHIVE'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

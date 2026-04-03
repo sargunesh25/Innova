@@ -1,64 +1,50 @@
 import React from 'react';
-import { ArrowUpRight, CheckCircle2, MoreHorizontal } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, MoreHorizontal, Loader2 } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const { isLoading, error, userProfile, solverMetrics, activeChallenges, opportunities, journalLogs, rankings, applyToOpportunity } = useDashboardInfo();
+
+  if (isLoading || !solverMetrics || !userProfile) {
+    return (
+      <div className="dashboard-container container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loader2 size={48} color="var(--brand-green)" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>SYNCING SECURE DATA...</p>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="dashboard-container container" style={{ textAlign: 'center', padding: '4rem' }}>
+        <h2 style={{ color: '#d9534f' }}>Connection Error</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard-container container">
       {/* Welcome Banner */}
       <div className="welcome-banner">
         <div className="welcome-text">
-          <h1>Good morning, Arjun</h1>
-          <p>You're in the top <em>5% of researchers</em> this month. Here's your impact overview for today.</p>
+          <h1>Good morning, {userProfile.firstName}</h1>
+          <p>You're in the top <em>{userProfile.percentile}% of researchers</em> this month. Here's your impact overview for today.</p>
         </div>
         <div className="welcome-stats">
           <div className="banner-stat-box">
             <span>CURRENT STREAK</span>
-            <strong>12 Days</strong>
+            <strong>{solverMetrics.streak} Days</strong>
           </div>
           <div className="banner-stat-box">
             <span>OPEN CHALLENGES</span>
-            <strong>24</strong>
+            <strong>{solverMetrics.openChallenges}</strong>
           </div>
         </div>
       </div>
 
-      {/* Metrics Row */}
-      <div className="metrics-row">
-        <div className="metric-card">
-          <div className="metric-header">TOTAL SUBMISSIONS</div>
-          <div className="metric-body">
-            <span className="metric-value">14</span>
-            <div className="metric-indicator">
-              <span className="metric-badge">+2 WK</span>
-            </div>
-          </div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-header">IDEAS UPVOTED</div>
-          <div className="metric-body">
-            <span className="metric-value">128</span>
-            <div className="metric-indicator text-secondary">
-              <ArrowUpRight size={20} />
-            </div>
-          </div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-header">PRIZE EARNINGS</div>
-          <div className="metric-body">
-            <span className="metric-value">₹4,250.00</span>
-          </div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-header">REPUTATION SCORE</div>
-          <div className="metric-body">
-            <span className="metric-value">892</span>
-            <div className="metric-indicator text-verified">
-              <CheckCircle2 size={20} color="#1a1a1a" fill="#fff" />
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Dashboard Layout */}
       <div className="dashboard-layout">
@@ -72,84 +58,67 @@ const Dashboard = () => {
               <a href="/challenges" className="header-link">BROWSE DIRECTORY</a>
             </div>
 
-            <div className="active-challenge-item">
-              <div className="ac-header">
-                <div>
-                  <h3>Sustainable Urban Mobility Phase II</h3>
-                  <p>Smart Infrastructure Department</p>
+            {activeChallenges.map((challenge, index) => (
+              <div key={challenge.id} className={`active-challenge-item ${index === activeChallenges.length - 1 ? 'last' : ''}`}>
+                <div className="ac-header">
+                  <div>
+                    <h3>{challenge.title}</h3>
+                    <p>{challenge.dept}</p>
+                  </div>
+                  <div className="ac-tag">{challenge.daysLeft} DAYS LEFT</div>
                 </div>
-                <div className="ac-tag">2 DAYS LEFT</div>
-              </div>
-              <div className="ac-progress">
-                <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '75%' }}></div><div className="progress-dot" style={{ left: '75%' }}></div></div>
-              </div>
-              <div className="ac-footer">
-                <span>RESEARCH PHASE</span>
-                <span>75% COMPLETE</span>
-              </div>
-            </div>
-
-            <div className="active-challenge-item last">
-              <div className="ac-header">
-                <div>
-                  <h3>AI Ethics Framework for Public Health</h3>
-                  <p>Global Ethics Laboratory</p>
+                <div className="ac-progress">
+                  <div className="progress-bar-bg">
+                    <div className="progress-bar-fill" style={{ width: `${challenge.progress}%` }}></div>
+                    <div className="progress-dot" style={{ left: `${challenge.progress}%` }}></div>
+                  </div>
                 </div>
-                <div className="ac-tag">14 DAYS LEFT</div>
+                <div className="ac-footer">
+                  <span>{challenge.phase}</span>
+                  <span>{challenge.progress}% COMPLETE</span>
+                </div>
               </div>
-              <div className="ac-progress">
-                <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '32%' }}></div><div className="progress-dot" style={{ left: '32%' }}></div></div>
-              </div>
-              <div className="ac-footer">
-                <span>IDEATION PHASE</span>
-                <span>32% COMPLETE</span>
-              </div>
-            </div>
+            ))}
           </section>
 
           {/* Featured Opportunities */}
           <section className="dashboard-section">
             <h2 className="section-title">Featured Opportunities</h2>
 
-            <div className="featured-card large-featured">
-              <div className="featured-image" style={{ backgroundImage: `url(/quantum.png)` }}></div>
-              <div className="featured-content">
-                <span className="feat-pill dark">HIGH STAKES</span>
-                <h3>Quantum Encryption<br />Protocols for 2030</h3>
-                <p>Propose a hardware-level encryption standard for the next generation of secure communication. Submissions require technical whitepapers.</p>
-                <div className="feat-footer">
-                  <span className="feat-price">₹15,000</span>
-                  <button className="primary-btn apply-btn">Apply Now</button>
+            {opportunities.filter(o => o.id.startsWith('feat-')).map(opp => (
+              <div key={opp.id} className="featured-card large-featured">
+                <div className="featured-image" style={{ backgroundImage: `url(${opp.image})` }}></div>
+                <div className="featured-content">
+                  <span className="feat-pill dark">{opp.tag}</span>
+                  <h3>{opp.title}</h3>
+                  <p>{opp.description}</p>
+                  <div className="feat-footer">
+                    <span className="feat-price">{opp.prize}</span>
+                    <button className="primary-btn apply-btn" onClick={() => applyToOpportunity(opp.id)}>Apply Now</button>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
 
             <div className="featured-card-row">
-              <div className="featured-subcard">
-                <div className="subcard-image" style={{ backgroundImage: `url(/forest.png)` }}></div>
-                <div className="subcard-content">
-                  <span className="feat-pill light">ECO FOCUS</span>
-                  <h4>Carbon Capture in Arid Climates</h4>
-                  <div className="subcard-footer">
-                    <span className="feat-price-small">₹8,200</span>
-                    <span className="feat-stat">125 RESEARCHERS</span>
+              {opportunities.filter(o => o.id.startsWith('sub-')).map(opp => (
+                <div key={opp.id} className={`featured-subcard ${opp.isHero ? 'solid-bg' : ''}`}>
+                  {opp.isHero ? (
+                    <div className="subcard-text-hero" dangerouslySetInnerHTML={{ __html: `<em>${opp.heroText}</em>` }}>
+                    </div>
+                  ) : (
+                    <div className="subcard-image" style={{ backgroundImage: `url(${opp.image})` }}></div>
+                  )}
+                  <div className="subcard-content">
+                    <span className="feat-pill light">{opp.tag}</span>
+                    <h4>{opp.title}</h4>
+                    <div className="subcard-footer">
+                      <span className="feat-price-small">{opp.prize}</span>
+                      <span className="feat-stat">{opp.stats}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="featured-subcard solid-bg">
-                <div className="subcard-text-hero">
-                  <em>New Research: The Future<br />of Biotech</em>
-                </div>
-                <div className="subcard-content">
-                  <span className="feat-pill light">LABORATORY</span>
-                  <h4>Synthetic Protein Synthesis</h4>
-                  <div className="subcard-footer">
-                    <span className="feat-price-small">₹12,400</span>
-                    <span className="feat-stat">45 RESEARCHERS</span>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </section>
 
@@ -162,27 +131,15 @@ const Dashboard = () => {
           <div className="dashboard-widget card-box">
             <h2 className="widget-title">Journal Log</h2>
             <ul className="journal-timeline">
-              <li>
-                <div className="timeline-dot"></div>
-                <div className="timeline-content">
-                  <p><strong>Elena Vance</strong> upvoted your idea in <em>Urban<br />Mobility</em>.</p>
-                  <span className="timeline-time">2 HOURS AGO</span>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-empty"></div>
-                <div className="timeline-content">
-                  <p>Your submission reached the <strong>Semi-Finals</strong><br />round in Ethics.</p>
-                  <span className="timeline-time">5 HOURS AGO</span>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-empty"></div>
-                <div className="timeline-content">
-                  <p><strong>Dr. Aris</strong> left a detailed note on your paper.</p>
-                  <span className="timeline-time">YESTERDAY</span>
-                </div>
-              </li>
+              {journalLogs.map(log => (
+                <li key={log.id}>
+                  <div className={log.hasDot ? "timeline-dot" : "timeline-empty"}></div>
+                  <div className="timeline-content">
+                    <p dangerouslySetInnerHTML={{ __html: log.text }}></p>
+                    <span className="timeline-time">{log.time}</span>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -190,34 +147,21 @@ const Dashboard = () => {
           <div className="dashboard-widget card-box">
             <h2 className="widget-title">Fellowship Rankings</h2>
             <div className="ranking-list">
-              <div className="ranking-item">
-                <span className="rank-num">1</span>
-                <img src="https://ui-avatars.com/api/?name=Sarah&background=random" alt="Sarah" className="rank-avatar" />
-                <div className="rank-info">
-                  <strong>Sarah Jenkins</strong>
-                  <span>1,240 XP</span>
+              {rankings.map(rank => (
+                <div key={rank.id} className={`ranking-item ${rank.trend === 'highlight' ? 'highlight-card' : ''}`}>
+                  <span className="rank-num">{rank.rank}</span>
+                  {rank.trend !== 'highlight' && (
+                    <img src={`https://ui-avatars.com/api/?name=${rank.name.split(' ')[0]}&background=random`} alt={rank.name} className="rank-avatar" />
+                  )}
+                  <div className="rank-info">
+                    <strong>{rank.name}</strong>
+                    <span>{rank.xp}</span>
+                  </div>
+                  {rank.trend === 'up' && <ArrowUpRight size={16} className="rank-icon trend-up" />}
+                  {rank.trend === 'flat' && <MoreHorizontal size={16} className="rank-icon trend-flat" />}
+                  {rank.badge && <span className="rank-badge">{rank.badge}</span>}
                 </div>
-                <ArrowUpRight size={16} className="rank-icon trend-up" />
-              </div>
-
-              <div className="ranking-item">
-                <span className="rank-num">2</span>
-                <img src="https://ui-avatars.com/api/?name=Marcus&background=random" alt="Marcus" className="rank-avatar" />
-                <div className="rank-info">
-                  <strong>Marcus Chen</strong>
-                  <span>1,150 XP</span>
-                </div>
-                <MoreHorizontal size={16} className="rank-icon trend-flat" />
-              </div>
-
-              <div className="ranking-item highlight-card">
-                <span className="rank-num">12</span>
-                <div className="rank-info">
-                  <strong>Arjun (You)</strong>
-                  <span>892 XP</span>
-                </div>
-                <span className="rank-badge">TOP 5%</span>
-              </div>
+              ))}
             </div>
           </div>
 

@@ -1,44 +1,31 @@
-import React, { useState } from 'react';
-import { Clock, Beaker, CheckCircle2, ChevronRight, FileText } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Clock, Beaker, CheckCircle2, ChevronRight, FileText, Loader2 } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './Laboratory.css';
 
-const activeSubmissions = [
-  {
-    id: 1,
-    title: "Quantum-Safe Encryption Protocols",
-    category: "ENGINEERING",
-    status: "Drafting",
-    progress: 30,
-    deadline: "12 Days Left",
-    lastEdited: "2 hours ago",
-    milestone: "Write Abstract"
-  },
-  {
-    id: 2,
-    title: "Sustainable Micro-Grid Economic Models",
-    category: "RESEARCH",
-    status: "Submitted",
-    progress: 100,
-    deadline: "Evaluation Phase",
-    lastEdited: "3 days ago",
-    milestone: "Awaiting Results"
-  },
-  {
-    id: 3,
-    title: "Adaptive Accessibility for VR Interfaces",
-    category: "DESIGN",
-    status: "Under Evaluation",
-    progress: 100,
-    deadline: "Judging",
-    lastEdited: "1 week ago",
-    milestone: "Semi-Finalist"
-  }
-];
-
 const Laboratory = () => {
+  const { labSubmissions, isLoading } = useDashboardInfo();
   const [activeTab, setActiveTab] = useState('All Active');
 
   const tabs = ['All Active', 'Drafts', 'Submitted', 'Completed'];
+
+  const filteredSubmissions = useMemo(() => {
+    if (activeTab === 'All Active') return labSubmissions;
+    if (activeTab === 'Drafts') return labSubmissions.filter(s => s.status === 'Drafting');
+    if (activeTab === 'Submitted') return labSubmissions.filter(s => s.status === 'Submitted');
+    if (activeTab === 'Completed') return labSubmissions.filter(s => s.status === 'Under Evaluation' || s.progress === 100);
+    return labSubmissions;
+  }, [labSubmissions, activeTab]);
+
+  if (isLoading) {
+    return (
+      <div className="laboratory-page container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loader2 size={48} color="var(--brand-green)" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>LOADING LABORATORY...</p>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="laboratory-page container">
@@ -46,7 +33,6 @@ const Laboratory = () => {
         <h1 className="page-title">My Laboratory</h1>
         <p className="page-subtitle">Your private workspace for active challenges and ongoing submissions.</p>
       </div>
-
 
       <div className="lab-workspace">
         <div className="workspace-tabs">
@@ -62,7 +48,7 @@ const Laboratory = () => {
         </div>
 
         <div className="submissions-list">
-          {activeSubmissions.map(sub => (
+          {filteredSubmissions.length > 0 ? filteredSubmissions.map(sub => (
             <div key={sub.id} className="submission-track-card">
               <div className="track-left">
                 <div className="track-icon-wrapper">
@@ -102,7 +88,11 @@ const Laboratory = () => {
                 </button>
               </div>
             </div>
-          ))}
+          )) : (
+            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+              <p>No submissions found for this filter.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

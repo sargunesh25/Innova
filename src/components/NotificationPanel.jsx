@@ -1,8 +1,24 @@
-import React from 'react';
-import { Settings, ArrowRight } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './NotificationPanel.css';
 
 const NotificationPanel = ({ isOpen, onClose }) => {
+  const { notifications, markAllNotificationsRead } = useDashboardInfo();
+  const [activeFilter, setActiveFilter] = useState('ALL');
+
+  const filters = ['ALL', 'MENTIONS', 'PRIZES', 'PHASE'];
+
+  const filteredNotifications = useMemo(() => {
+    if (activeFilter === 'ALL') return notifications;
+    const typeMap = { 'MENTIONS': 'mention', 'PRIZES': 'prize', 'PHASE': 'phase' };
+    return notifications.filter(n => n.type === typeMap[activeFilter]);
+  }, [notifications, activeFilter]);
+
+  const handleMarkAllRead = () => {
+    markAllNotificationsRead();
+  };
+
   return (
     <>
       {/* Dim Overlay */}
@@ -17,70 +33,42 @@ const NotificationPanel = ({ isOpen, onClose }) => {
         
         <div className="notif-header">
           <h2>Notifications</h2>
-          <button className="mark-read-btn">MARK ALL READ</button>
+          <button className="mark-read-btn" onClick={handleMarkAllRead}>MARK ALL READ</button>
         </div>
 
         <div className="notif-filters">
-          <button className="filter-pill active">ALL</button>
-          <button className="filter-pill">MENTIONS</button>
-          <button className="filter-pill">PRIZES</button>
-          <button className="filter-pill">PHASE</button>
+          {filters.map(f => (
+            <button
+              key={f}
+              className={`filter-pill ${activeFilter === f ? 'active' : ''}`}
+              onClick={() => setActiveFilter(f)}
+            >
+              {f}
+            </button>
+          ))}
         </div>
 
         <div className="notif-content-scroll">
-          
-          <div className="notif-card highlight-green">
-            <div className="notif-dot green-dot"></div>
-            <div className="notif-card-content">
-              <p><strong>Elena Vance</strong> tagged you in the <strong><em>Bio-Lattice Study</em></strong></p>
-              <div className="notif-card-footer">
-                <span className="notif-time">14:22 GMT &bull; OCT 25</span>
-                <button className="notif-action-btn green-action">VIEW CHALLENGE <ArrowRight size={12} /></button>
+          {filteredNotifications.length > 0 ? filteredNotifications.map(notif => (
+            <div key={notif.id} className={`notif-card ${notif.cardStyle}`} style={{ opacity: notif.read ? 0.6 : 1 }}>
+              <div className={`notif-dot ${notif.dotColor}`}></div>
+              <div className="notif-card-content">
+                <p dangerouslySetInnerHTML={{ __html: notif.text }}></p>
+                <div className="notif-card-footer">
+                  <span className="notif-time">{notif.time}</span>
+                  {notif.actionLabel && (
+                    <button className={`notif-action-btn ${notif.actionStyle}`}>
+                      {notif.actionLabel} <ArrowRight size={12} />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="notif-card transparent-card">
-            <div className="notif-dot purple-dot"></div>
-            <div className="notif-card-content">
-              <p>You've been awarded the <em>"Synthesis Pioneer"</em> digital badge.</p>
-              <div className="notif-card-footer">
-                <span className="notif-time">09:15 GMT &bull; OCT 25</span>
-              </div>
+          )) : (
+            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+              <p>No notifications in this category.</p>
             </div>
-          </div>
-          
-          <div className="notif-card light-beige">
-            <div className="notif-dot green-dot"></div>
-            <div className="notif-card-content">
-              <p>The <strong><em>Quantum Flora</em></strong> project has moved to <strong>Phase II: Incubation</strong>.</p>
-              <div className="notif-card-footer">
-                <span className="notif-time">17:40 GMT &bull; OCT 24</span>
-                <button className="notif-action-btn dark-action">READ UPDATE <ArrowRight size={12} /></button>
-              </div>
-            </div>
-          </div>
-
-          <div className="notif-card light-beige">
-            <div className="notif-dot gray-dot"></div>
-            <div className="notif-card-content">
-              <p>System maintenance scheduled for tonight at 02:00 GMT.</p>
-              <div className="notif-card-footer">
-                <span className="notif-time">12:00 GMT &bull; OCT 24</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="notif-card light-beige">
-            <div className="notif-dot gray-dot"></div>
-            <div className="notif-card-content">
-              <p>Laboratory access keys have been updated for Building 4.</p>
-              <div className="notif-card-footer">
-                <span className="notif-time">09:30 GMT &bull; OCT 22</span>
-              </div>
-            </div>
-          </div>
-
+          )}
         </div>
 
       </div>

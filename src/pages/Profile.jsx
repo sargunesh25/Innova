@@ -1,9 +1,32 @@
-import React from 'react';
-import { Pencil, Award, Search, DollarSign, Users, Rocket, GraduationCap, Lock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Pencil, Award, Search, DollarSign, Users, Rocket, GraduationCap, Lock, Loader2 } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './Profile.css';
-import avatarImg from '/julian_avatar.png'; // Placeholder for the copied image
+
+const iconMap = { Award, Search, DollarSign, Users, Rocket, GraduationCap, Lock };
 
 const Profile = () => {
+  const { profileData, isLoading } = useDashboardInfo();
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  if (isLoading || !profileData) {
+    return (
+      <div className="profile-container container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loader2 size={48} color="var(--brand-green)" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>LOADING PROFILE...</p>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  const filteredHistory = activeFilter === 'All'
+    ? profileData.submissionHistory
+    : profileData.submissionHistory.filter(s => {
+        if (activeFilter === 'Won') return s.status === 'WON';
+        if (activeFilter === 'Drafts') return s.status === 'DRAFT';
+        return true;
+      });
+
   return (
     <div className="profile-container container">
       
@@ -11,14 +34,15 @@ const Profile = () => {
       <div className="profile-banner">
         <div className="banner-left">
           <div className="avatar-wrapper">
-            <img src={'/julian_avatar.png'} alt="Julian Deering" className="profile-avatar" />
+            <img src={profileData.avatarUrl} alt={profileData.name} className="profile-avatar" />
           </div>
           <div className="profile-info">
-            <h1>Julian Deering</h1>
-            <p className="profile-title">Lead Architect &middot; London, UK</p>
+            <h1>{profileData.name}</h1>
+            <p className="profile-title">{profileData.title} &middot; {profileData.location}</p>
             <div className="profile-badges">
-              <span className="badge-pill elite">ELITE CONTRIBUTOR</span>
-              <span className="badge-pill mentor">TOP 1% MENTOR</span>
+              {profileData.badges.map((badge, i) => (
+                <span key={i} className={`badge-pill ${badge.type}`}>{badge.label}</span>
+              ))}
             </div>
           </div>
         </div>
@@ -33,19 +57,19 @@ const Profile = () => {
       <div className="profile-stats-row">
         <div className="profile-stat-card">
           <span className="p-stat-label">SUBMISSIONS</span>
-          <strong className="p-stat-value">124</strong>
+          <strong className="p-stat-value">{profileData.stats.submissions}</strong>
         </div>
         <div className="profile-stat-card">
           <span className="p-stat-label">WINS</span>
-          <strong className="p-stat-value">18</strong>
+          <strong className="p-stat-value">{profileData.stats.wins}</strong>
         </div>
         <div className="profile-stat-card">
           <span className="p-stat-label">REPUTATION PTS</span>
-          <strong className="p-stat-value">8,420</strong>
+          <strong className="p-stat-value">{profileData.stats.reputationPts}</strong>
         </div>
         <div className="profile-stat-card">
           <span className="p-stat-label">TOTAL EARNED</span>
-          <strong className="p-stat-value">₹42.5k</strong>
+          <strong className="p-stat-value">{profileData.stats.totalEarned}</strong>
         </div>
       </div>
 
@@ -57,62 +81,30 @@ const Profile = () => {
           <div className="history-header">
             <h2>Submission History</h2>
             <div className="history-filters">
-              <button className="filter-tab active">All</button>
-              <button className="filter-tab">Won</button>
-              <button className="filter-tab">Drafts</button>
+              {['All', 'Won', 'Drafts'].map(f => (
+                <button key={f} className={`filter-tab ${activeFilter === f ? 'active' : ''}`} onClick={() => setActiveFilter(f)}>{f}</button>
+              ))}
             </div>
           </div>
 
           <div className="history-list">
-            
-            <div className="history-card">
-              <div className="hc-left">
-                <div className="hc-icon-box">
-                  <span className="icon-symbol">&#9732;</span> {/* Fallback icon, wait Mockup has specific icons */}
+            {filteredHistory.map(item => (
+              <div key={item.id} className="history-card">
+                <div className="hc-left">
+                  <div className="hc-icon-box">
+                    <span className="icon-symbol">{item.icon}</span>
+                  </div>
+                  <div className="hc-info">
+                    <h3>{item.title}</h3>
+                    <span className="hc-date">{item.date}</span>
+                  </div>
                 </div>
-                <div className="hc-info">
-                  <h3>Quantum Computing Architecture for Logistics</h3>
-                  <span className="hc-date">Submitted Mar 12, 2024</span>
-                </div>
-              </div>
-              <div className="hc-right">
-                <span className="hc-status status-won">WON</span>
-                <span className="hc-prize">₹12,000</span>
-              </div>
-            </div>
-
-            <div className="history-card">
-              <div className="hc-left">
-                <div className="hc-icon-box">
-                  <span className="icon-symbol">&#127807;</span>
-                </div>
-                <div className="hc-info">
-                  <h3>Sustainable Water Purification in Arid Regions</h3>
-                  <span className="hc-date">Submitted Feb 28, 2024</span>
+                <div className="hc-right">
+                  <span className={`hc-status ${item.statusClass}`}>{item.status}</span>
+                  <span className="hc-prize">{item.prize}</span>
                 </div>
               </div>
-              <div className="hc-right">
-                <span className="hc-status status-review">UNDER REVIEW</span>
-                <span className="hc-prize">₹8,500</span>
-              </div>
-            </div>
-
-            <div className="history-card">
-              <div className="hc-left">
-                <div className="hc-icon-box">
-                  <span className="icon-symbol">&#9881;</span>
-                </div>
-                <div className="hc-info">
-                  <h3>Neural Interface for Edge Processing</h3>
-                  <span className="hc-date">Submitted Jan 15, 2024</span>
-                </div>
-              </div>
-              <div className="hc-right">
-                <span className="hc-status status-finalist">FINALIST</span>
-                <span className="hc-prize">₹22,000</span>
-              </div>
-            </div>
-
+            ))}
           </div>
         </div>
 
@@ -121,60 +113,39 @@ const Profile = () => {
           
           <div className="sidebar-section">
             <h4 className="sidebar-title">REPUTATION BREAKDOWN</h4>
-            
-            <div className="rep-bar-group">
-              <div className="rep-bar-header">
-                <span>Innovation Design</span>
-                <span>85%</span>
+            {profileData.reputationBreakdown.map((rep, i) => (
+              <div key={i} className="rep-bar-group">
+                <div className="rep-bar-header">
+                  <span>{rep.label}</span>
+                  <span>{rep.percent}%</span>
+                </div>
+                <div className="rep-bar-bg">
+                  <div className="rep-bar-fill" style={{width: `${rep.percent}%`}}></div>
+                </div>
               </div>
-              <div className="rep-bar-bg">
-                <div className="rep-bar-fill" style={{width: '85%'}}></div>
-              </div>
-            </div>
-
-            <div className="rep-bar-group">
-              <div className="rep-bar-header">
-                <span>Technical Rigor</span>
-                <span>92%</span>
-              </div>
-              <div className="rep-bar-bg">
-                <div className="rep-bar-fill" style={{width: '92%'}}></div>
-              </div>
-            </div>
-
-            <div className="rep-bar-group">
-              <div className="rep-bar-header">
-                <span>Peer Mentorship</span>
-                <span>64%</span>
-              </div>
-              <div className="rep-bar-bg">
-                <div className="rep-bar-fill" style={{width: '64%'}}></div>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="sidebar-section">
             <h4 className="sidebar-title">DOMAIN EXPERTISE</h4>
             <div className="expertise-tags">
-              <span className="expertise-tag">Systems Architecture</span>
-              <span className="expertise-tag">Biotech</span>
-              <span className="expertise-tag">AI Ethics</span>
-              <span className="expertise-tag">Urban Planning</span>
-              <span className="expertise-tag">Product Strategy</span>
+              {profileData.expertise.map((tag, i) => (
+                <span key={i} className="expertise-tag">{tag}</span>
+              ))}
             </div>
           </div>
 
           <div className="sidebar-section">
             <h4 className="sidebar-title">UNLOCKED ACHIEVEMENTS</h4>
             <div className="achievements-grid">
-              <div className="ach-box unlocked"><Award size={20} color="#1a6d36" /></div>
-              <div className="ach-box unlocked"><Search size={20} color="#1a6d36" /></div>
-              <div className="ach-box unlocked"><DollarSign size={20} color="#1a6d36" /></div>
-              <div className="ach-box unlocked"><Users size={20} color="#1a6d36" /></div>
-              <div className="ach-box unlocked"><Rocket size={20} color="#1a6d36" /></div>
-              <div className="ach-box unlocked"><GraduationCap size={20} color="#1a6d36" /></div>
-              <div className="ach-box locked"><Lock size={20} color="#ccc" /></div>
-              <div className="ach-box locked"><Lock size={20} color="#ccc" /></div>
+              {profileData.achievements.map((ach, i) => {
+                const IconComponent = iconMap[ach.icon];
+                return (
+                  <div key={i} className={`ach-box ${ach.unlocked ? 'unlocked' : 'locked'}`}>
+                    <IconComponent size={20} color={ach.unlocked ? '#1a6d36' : '#ccc'} />
+                  </div>
+                );
+              })}
             </div>
           </div>
 

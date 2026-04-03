@@ -1,9 +1,38 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, Download, Lock, ThumbsUp, MessageSquare, GitFork, ChevronDown } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, CheckCircle2, Download, Lock, ThumbsUp, MessageSquare, GitFork, Loader2 } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './ChallengeDetails.css';
 
 const ChallengeDetails = () => {
+  const { id } = useParams();
+  const { challengesList, isLoading } = useDashboardInfo();
+
+  if (isLoading) {
+    return (
+      <div className="challenge-details-page container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loader2 size={48} color="var(--brand-green)" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>LOADING CHALLENGE...</p>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  const challenge = challengesList.find(c => c.id === Number(id));
+
+  if (!challenge) {
+    return (
+      <div className="challenge-details-page container" style={{ textAlign: 'center', padding: '6rem 2rem' }}>
+        <h2>Challenge not found</h2>
+        <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>The challenge you're looking for doesn't exist or has been removed.</p>
+        <Link to="/challenges" className="primary-btn" style={{ display: 'inline-block', marginTop: '1.5rem' }}>Back to Challenges</Link>
+      </div>
+    );
+  }
+
+  const phaseIndex = challenge.currentPhase === 'Sealed' ? 1 : challenge.currentPhase === 'Evaluation' ? 2 : challenge.currentPhase === 'Completed' ? 3 : 0;
+  const progressWidth = ((phaseIndex + 1) / 4) * 100;
+
   return (
     <div className="challenge-details-page container">
       <Link to="/challenges" className="back-link">
@@ -13,110 +42,90 @@ const ChallengeDetails = () => {
       <div className="details-content-grid">
         <div className="main-content">
           <div className="header-host">
-            <div className="host-logo">S</div>
-            <span className="host-name">Synthetix Labs</span>
-            <span className="badge-verified">✓ VERIFIED PARTNER</span>
+            <div className="host-logo">{challenge.host.logoInitial}</div>
+            <span className="host-name">{challenge.host.name}</span>
+            {challenge.host.verified && <span className="badge-verified">✓ VERIFIED PARTNER</span>}
           </div>
-          <h1 className="details-title">The Carbon-Neutral Logistics Algorithm Challenge</h1>
-          <p className="details-description">
-            Design a decentralized routing protocol that minimizes carbon emissions for last-mile delivery fleets while maintaining under-60-minute delivery SLAs in dense urban environments.
-          </p>
+          <h1 className="details-title">{challenge.title}</h1>
+          <p className="details-description">{challenge.description}</p>
 
           <div className="timeline-banner">
             <div className="timeline-banner-header">
-              <span className="current-phase-label">CURRENT PHASE : SEALED PHASE</span>
-              <span className="time-left">Ends in 14 days</span>
+              <span className="current-phase-label">CURRENT PHASE : {challenge.currentPhase.toUpperCase()} PHASE</span>
+              <span className="time-left">{challenge.timeLeft}</span>
             </div>
             <div className="timeline-progress-bar">
-              <div className="progress-fill"></div>
-              <div className="progress-node filled"></div>
-              <div className="progress-node filled current"></div>
-              <div className="progress-node"></div>
-              <div className="progress-node"></div>
+              <div className="progress-fill" style={{ width: `${progressWidth}%` }}></div>
+              <div className={`progress-node ${phaseIndex >= 0 ? 'filled' : ''}`}></div>
+              <div className={`progress-node ${phaseIndex >= 1 ? 'filled' : ''} ${phaseIndex === 1 ? 'current' : ''}`}></div>
+              <div className={`progress-node ${phaseIndex >= 2 ? 'filled' : ''} ${phaseIndex === 2 ? 'current' : ''}`}></div>
+              <div className={`progress-node ${phaseIndex >= 3 ? 'filled' : ''} ${phaseIndex === 3 ? 'current' : ''}`}></div>
             </div>
             <div className="timeline-labels">
-              <span>Challenge posted</span>
-              <span className="active">Sealed phase</span>
-              <span>Open phase</span>
-              <span>Judging</span>
+              <span className={phaseIndex === 0 ? 'active' : ''}>Challenge posted</span>
+              <span className={phaseIndex === 1 ? 'active' : ''}>Sealed phase</span>
+              <span className={phaseIndex === 2 ? 'active' : ''}>Open phase</span>
+              <span className={phaseIndex === 3 ? 'active' : ''}>Judging</span>
             </div>
           </div>
 
-          <details className="description-dropdown">
-            <summary className="description-summary">
-              <h2 className="description-title">Description</h2>
-              <ChevronDown size={28} className="dropdown-icon" />
-            </summary>
-            
-            <div className="description-content">
-              <section className="detail-section">
-                <h2 className="section-heading bordered">The problem</h2>
-                <div className="section-body">
-                  <p>Current routing algorithms optimize for the shortest path or the fastest time, often ignoring the energy-load variations caused by traffic density and vehicle weight changes. In urban centers, this lead to a 15% inefficiency in battery consumption for electric fleets.</p>
-                  <br />
-                  <p>We are seeking a novel approach that treats carbon-cost as a primary variable in the optimization function, rather than an afterthought.</p>
-                </div>
-              </section>
+          <div className="description-content mt-4">
+            <section className="detail-section">
+              <h2 className="section-heading bordered">The problem</h2>
+              <div className="section-body">
+                <p>{challenge.problemStatement}</p>
+                <br />
+                <p>{challenge.problemDetail}</p>
+              </div>
+            </section>
 
-              <section className="detail-section">
-                <h2 className="section-heading bordered">Constraints</h2>
-                <div className="section-body constraints-list">
-                  <div className="constraint-item">
+            <section className="detail-section">
+              <h2 className="section-heading bordered">Constraints</h2>
+              <div className="section-body constraints-list">
+                {challenge.constraints.map((c, i) => (
+                  <div key={i} className="constraint-item">
                     <CheckCircle2 size={16} className="check-icon" />
-                    <span>Must be compatible with Python 3.10+ and PyTorch frameworks.</span>
+                    <span>{c}</span>
                   </div>
-                  <div className="constraint-item">
-                    <CheckCircle2 size={16} className="check-icon" />
-                    <span>API latency for re-routing must not exceed 200ms.</span>
-                  </div>
-                  <div className="constraint-item">
-                    <CheckCircle2 size={16} className="check-icon" />
-                    <span>Algorithm must handle at least 50 concurrent vehicle nodes.</span>
-                  </div>
-                </div>
-              </section>
+                ))}
+              </div>
+            </section>
 
-              <section className="detail-section">
-                <h2 className="section-heading bordered">Judging criteria</h2>
-                <div className="criteria-grid">
-                  <div className="criteria-card">
-                    <span className="weight-badge">WEIGHT : 40%</span>
-                    <h4 className="criteria-title">Carbon Efficiency</h4>
-                    <p className="criteria-desc">Measured reduction in Watt-hours per kilometer compared to the baseline OSRM engine.</p>
+            <section className="detail-section">
+              <h2 className="section-heading bordered">Judging criteria</h2>
+              <div className="criteria-grid">
+                {challenge.judgingCriteria.map((jc, i) => (
+                  <div key={i} className="criteria-card">
+                    <span className="weight-badge">WEIGHT : {jc.weight}%</span>
+                    <h4 className="criteria-title">{jc.title}</h4>
+                    <p className="criteria-desc">{jc.desc}</p>
                   </div>
-                  <div className="criteria-card">
-                    <span className="weight-badge">WEIGHT : 30%</span>
-                    <h4 className="criteria-title">Algorithm Scalability</h4>
-                    <p className="criteria-desc">The ability to maintain performance as node density increases exponentially.</p>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </details>
+                ))}
+              </div>
+            </section>
+          </div>
 
           <section className="detail-section">
             <h2 className="section-heading bordered">Resources</h2>
             <div className="resources-list">
-              <div className="resource-item">
-                <div className="resource-name">📄 Technical Dataset v1.2 (.csv)</div>
-                <Download size={18} className="download-icon" />
-              </div>
-              <div className="resource-item">
-                <div className="resource-name">📁 Baseline Model weights (.pt)</div>
-                <Download size={18} className="download-icon" />
-              </div>
+              {challenge.resources.map((res, i) => (
+                <div key={i} className="resource-item">
+                  <div className="resource-name">{res.name}</div>
+                  <Download size={18} className="download-icon" />
+                </div>
+              ))}
             </div>
           </section>
 
           <section className="detail-section submissions-section">
             <div className="submissions-header">
               <h2 className="section-heading bordered">Submissions</h2>
-              <span className="badge-dark">🔒 SEALED PHASE</span>
+              <span className="badge-dark">🔒 {challenge.currentPhase.toUpperCase()} PHASE</span>
             </div>
 
             <div className="sealed-banner">
               <Lock size={24} className="locked-icon" />
-              <p>Submissions are currently hidden to <strong>prevent bias</strong>.<br />Once the phase ends, all 42 entries will be revealed.</p>
+              <p>Submissions are currently hidden to <strong>prevent bias</strong>.<br />Once the phase ends, all {challenge.submissions} entries will be revealed.</p>
             </div>
 
             <div className="mock-submission-card">
@@ -141,26 +150,26 @@ const ChallengeDetails = () => {
         <aside className="details-sidebar">
           <div className="prize-card">
             <div className="prize-label">GRAND PRIZE</div>
-            <div className="prize-value">₹12,500</div>
-            <div className="prize-sub">IN USDC + GRANTS</div>
+            <div className="prize-value">{challenge.grandPrize}</div>
+            <div className="prize-sub">{challenge.prizeType}</div>
           </div>
 
           <div className="stats-card">
             <div className="stat-row">
               <span className="stat-key">PHASE</span>
-              <span className="stat-val">Sealed</span>
+              <span className="stat-val">{challenge.currentPhase}</span>
             </div>
             <div className="stat-row">
               <span className="stat-key">SUBMISSIONS</span>
-              <span className="stat-val">42</span>
+              <span className="stat-val">{challenge.submissions}</span>
             </div>
             <div className="stat-row">
               <span className="stat-key">PARTICIPANTS</span>
-              <span className="stat-val">128</span>
+              <span className="stat-val">{challenge.participants}</span>
             </div>
             <div className="stat-row">
               <span className="stat-key">DIFFICULTY</span>
-              <span className="stat-val">Expert</span>
+              <span className="stat-val">{challenge.difficulty}</span>
             </div>
             <Link to="/submit" className="full-width" style={{ display: 'block' }}>
               <button className="primary-btn full-width">Submit your idea</button>
@@ -171,9 +180,9 @@ const ChallengeDetails = () => {
           <div className="host-info-card">
             <div className="host-label">ABOUT THE HOST</div>
             <div className="host-details">
-              <div className="host-logo-small">S</div>
+              <div className="host-logo-small">{challenge.host.logoInitial}</div>
               <div className="host-text">
-                <div className="host-name-small">Synthetix Labs</div>
+                <div className="host-name-small">{challenge.host.name}</div>
                 <div className="host-desc-small">Autonomous systems research</div>
               </div>
             </div>

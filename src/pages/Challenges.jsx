@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search as SearchIcon, ChevronDown as ChevronIcon, Globe as GlobeIcon, Lock as LockIcon } from 'lucide-react';
+import { Search as SearchIcon, ChevronDown as ChevronIcon, Globe as GlobeIcon, Lock as LockIcon, Loader2 } from 'lucide-react';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './Challenges.css';
 
 const Challenges = () => {
+  const { challengesList, isLoading } = useDashboardInfo();
+
   // Main filter states (instant apply)
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPill, setSelectedPill] = useState('All Items');
@@ -20,112 +23,34 @@ const Challenges = () => {
   const [appliedPhase, setAppliedPhase] = useState('Accepting Submissions');
   const [appliedSidebarCats, setAppliedSidebarCats] = useState(['Industrial Design', 'Software Architecture', 'Digital Product']);
 
-  const challengesData = [
-    {
-      title: "Quantum-Safe Encryption Protocols for IoT",
-      description: "Develop a lightweight cryptographic module capable of resisting Shor's algorithm while maintaining low-latency execution on ARM-based hardware.",
-      category: "Engineering",
-      subcategory: "Software Architecture",
-      timeLabel: "12d Left",
-      daysLeft: 12,
-      timeColor: "green",
-      prize: "₹50,000",
-      prizeValue: 50000,
-      phase: "Accepting Submissions",
-      status: "Open",
-      createdAt: new Date('2026-03-20')
-    },
-    {
-      title: "Adaptive Accessibility for VR Interfaces",
-      description: "Reimagining spatial computing interactions for users with limited motor function. Focus on gaze-to-action mapping and haptic feedback loops.",
-      category: "Design",
-      subcategory: "Digital Product",
-      timeLabel: "Ends Today",
-      daysLeft: 0,
-      timeColor: "yellow",
-      prize: "₹25,000",
-      prizeValue: 25000,
-      phase: "Evaluation in Progress",
-      status: "Sealed",
-      createdAt: new Date('2026-03-25')
-    },
-    {
-      title: "Sustainable Micro-Grid Economic Models",
-      description: "A longitudinal study and simulation of peer-to-peer energy trading in rural communities with intermittent solar availability.",
-      category: "Research",
-      subcategory: "Sustainable Energy",
-      timeLabel: "45d Left",
-      daysLeft: 45,
-      timeColor: "purple",
-      prize: "₹120,000",
-      prizeValue: 120000,
-      phase: "Accepting Submissions",
-      status: "Open",
-      createdAt: new Date('2026-03-10')
-    },
-    {
-      title: "Edge-AI Noise Cancellation for Rail Systems",
-      description: "Optimizing neural networks for sub-10ms processing on low-power DSPs to isolate voice from heavy machinery acoustics.",
-      category: "Engineering",
-      subcategory: "Industrial Design",
-      timeLabel: "8d Left",
-      daysLeft: 8,
-      timeColor: "green",
-      prize: "₹42,500",
-      prizeValue: 42500,
-      phase: "Completed & Awarded",
-      status: "Sealed",
-      createdAt: new Date('2026-03-28')
-    }
-  ];
-
   const filteredChallenges = useMemo(() => {
-    let result = challengesData.filter(challenge => {
-      // 1. Search Query
+    let result = challengesList.filter(challenge => {
       if (searchQuery && !challenge.title.toLowerCase().includes(searchQuery.toLowerCase()) && !challenge.description.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
       }
-      
-      // 2. Category Pill
       if (selectedPill !== 'All Items' && challenge.category !== selectedPill) {
         return false;
       }
-
-      // 3. Min Prize (Applied)
       if (challenge.prizeValue < appliedMinPrize) {
         return false;
       }
-
-      // 4. Phase (Applied)
       if (appliedPhase && challenge.phase !== appliedPhase) {
         return false;
       }
-
-      // 5. Sidebar subcategories (Applied)
       if (appliedSidebarCats.length > 0 && !appliedSidebarCats.includes(challenge.subcategory)) {
         return false;
       }
-
       return true;
     });
 
-    // Sort Logic
     return result.sort((a, b) => {
-      if (sortBy === 'Latest') {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      }
-      if (sortBy === 'Closing Soon') {
-        return a.daysLeft - b.daysLeft;
-      }
-      if (sortBy === 'Prize: High to Low') {
-        return b.prizeValue - a.prizeValue;
-      }
-      if (sortBy === 'Prize: Low to High') {
-        return a.prizeValue - b.prizeValue;
-      }
+      if (sortBy === 'Latest') return b.createdAt.getTime() - a.createdAt.getTime();
+      if (sortBy === 'Closing Soon') return a.daysLeft - b.daysLeft;
+      if (sortBy === 'Prize: High to Low') return b.prizeValue - a.prizeValue;
+      if (sortBy === 'Prize: Low to High') return a.prizeValue - b.prizeValue;
       return 0;
     });
-  }, [searchQuery, selectedPill, appliedMinPrize, appliedPhase, appliedSidebarCats, sortBy]);
+  }, [challengesList, searchQuery, selectedPill, appliedMinPrize, appliedPhase, appliedSidebarCats, sortBy]);
 
   const toggleSidebarCat = (cat) => {
     if (sidebarCats.includes(cat)) {
@@ -140,6 +65,16 @@ const Challenges = () => {
     setAppliedPhase(selectedPhase);
     setAppliedSidebarCats(sidebarCats);
   };
+
+  if (isLoading) {
+    return (
+      <div className="challenges-page container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <Loader2 size={48} color="var(--brand-green)" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>LOADING CHALLENGES...</p>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="challenges-page container">
@@ -191,8 +126,8 @@ const Challenges = () => {
       <div className="challenges-content">
         <div className="challenges-main">
           <div className={`challenges-grid ${filteredChallenges.length === 0 ? 'empty' : ''}`}>
-            {filteredChallenges.length > 0 ? filteredChallenges.map((challenge, index) => (
-              <Link to={`/challenge/${index + 1}`} key={index} className="challenge-card-link">
+            {filteredChallenges.length > 0 ? filteredChallenges.map((challenge) => (
+              <Link to={`/challenge/${challenge.id}`} key={challenge.id} className="challenge-card-link">
                 <div className="challenge-card">
                   <div className="card-top">
                     <div className="card-logo-placeholder"></div>

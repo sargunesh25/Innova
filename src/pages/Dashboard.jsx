@@ -1,9 +1,11 @@
 import React from 'react';
-import { ArrowUpRight, CheckCircle2, MoreHorizontal, Loader2 } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, MoreHorizontal, Loader2, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useDashboardInfo } from '../context/DashboardContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { isLoading, error, userProfile, solverMetrics, activeChallenges, opportunities, journalLogs, rankings, applyToOpportunity } = useDashboardInfo();
 
   if (isLoading || !solverMetrics || !userProfile) {
@@ -67,15 +69,15 @@ const Dashboard = () => {
                   </div>
                   <div className="ac-tag">{challenge.daysLeft} DAYS LEFT</div>
                 </div>
-                <div className="ac-progress">
-                  <div className="progress-bar-bg">
-                    <div className="progress-bar-fill" style={{ width: `${challenge.progress}%` }}></div>
-                    <div className="progress-dot" style={{ left: `${challenge.progress}%` }}></div>
-                  </div>
-                </div>
                 <div className="ac-footer">
                   <span>{challenge.phase}</span>
-                  <span>{challenge.progress}% COMPLETE</span>
+                  <button
+                    className="ac-view-btn"
+                    onClick={() => navigate(`/challenge/${challenge.id}`)}
+                    aria-label="View challenge"
+                  >
+                    <ArrowRight size={14} />
+                  </button>
                 </div>
               </div>
             ))}

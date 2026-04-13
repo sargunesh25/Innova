@@ -161,43 +161,37 @@
   border-radius: 4px;
 }
 
-.ac-progress {
-  width: 100%;
-  margin-bottom: 0.75rem;
-}
-
-.progress-bar-bg {
-  width: 100%;
-  height: 2px;
-  background-color: #eae8de;
-  position: relative;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background-color: var(--text-primary);
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.progress-dot {
-  width: 6px;
-  height: 6px;
-  background-color: var(--text-primary);
-  border-radius: 50%;
-  position: absolute;
-  top: -2px;
-  transform: translateX(-50%);
-}
-
 .ac-footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 1px;
   color: var(--text-primary);
+}
+
+.ac-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+  flex-shrink: 0;
+}
+
+.ac-view-btn:hover {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: #fff;
+  transform: scale(1.08);
 }
 
 /* Featured Opportunities */

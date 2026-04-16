@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Search as SearchIcon, ChevronDown as ChevronIcon, Globe as GlobeIcon, Lock as LockIcon, Loader2 } from 'lucide-react';
 import { useDashboardInfo } from '../context/DashboardContext';
 import './Challenges.css';
 
 const Challenges = () => {
-  const { challengesList, isLoading } = useDashboardInfo();
+  const { challengesList, isLoading, fetchChallenges } = useDashboardInfo();
 
   // Main filter states (instant apply)
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,14 +14,21 @@ const Challenges = () => {
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
 
   // Sidebar filter states (buffered before 'Apply filters')
-  const [minPrize, setMinPrize] = useState(2000);
-  const [selectedPhase, setSelectedPhase] = useState('Accepting Submissions');
-  const [sidebarCats, setSidebarCats] = useState(['Industrial Design', 'Software Architecture', 'Digital Product']);
+  const [minPrize, setMinPrize] = useState(0);
+  const [selectedPhase, setSelectedPhase] = useState('');
+  const [sidebarCats, setSidebarCats] = useState([]);
 
   // Applied Sidebar States
-  const [appliedMinPrize, setAppliedMinPrize] = useState(2000);
-  const [appliedPhase, setAppliedPhase] = useState('Accepting Submissions');
-  const [appliedSidebarCats, setAppliedSidebarCats] = useState(['Industrial Design', 'Software Architecture', 'Digital Product']);
+  const [appliedMinPrize, setAppliedMinPrize] = useState(0);
+  const [appliedPhase, setAppliedPhase] = useState('');
+  const [appliedSidebarCats, setAppliedSidebarCats] = useState([]);
+
+  const [page, setPage] = useState(1);
+
+  // Fetch on mount
+  useEffect(() => {
+    fetchChallenges({ page: 1 });
+  }, [fetchChallenges]);
 
   const filteredChallenges = useMemo(() => {
     let result = challengesList.filter(challenge => {
@@ -163,7 +170,17 @@ const Challenges = () => {
           </div>
           {filteredChallenges.length > 0 && (
             <div className="load-more-container">
-              <button className="outline-btn load-more-btn">Load more challenges</button>
+              <button
+                className="outline-btn load-more-btn"
+                onClick={() => {
+                  const nextPage = page + 1;
+                  setPage(nextPage);
+                  fetchChallenges({ page: nextPage });
+                }}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Loading...' : 'Load more challenges'}
+              </button>
             </div>
           )}
         </div>

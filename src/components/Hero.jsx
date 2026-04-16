@@ -15,9 +15,9 @@ const Hero = () => {
         </h1>
         <div className="hero-actions">
           <Link to="/challenges" className="primary-btn hero-btn">Browse open challenges</Link>
-          <button className="outline-btn hero-btn">
+          <Link to="/join?role=company" className="outline-btn hero-btn">
             Post a challenge <ArrowRight size={16} className="btn-icon" />
-          </button>
+          </Link>
         </div>
         </div>
         <div className="hero-background-effects">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Globe, Asterisk } from 'lucide-react';
 import './Footer.css';
 
@@ -21,27 +22,27 @@ const Footer = () => {
           <div className="footer-column">
             <h4 className="column-title">PLATFORM</h4>
             <ul className="footer-links">
-              <li><a href="#">Challenges</a></li>
-              <li><a href="#">Solvers</a></li>
-              <li><a href="#">Enterprise</a></li>
+              <li><Link to="/challenges">Challenges</Link></li>
+              <li><Link to="/join">Solvers</Link></li>
+              <li><Link to="/join?role=company">Enterprise</Link></li>
             </ul>
           </div>
           
           <div className="footer-column">
             <h4 className="column-title">COMPANY</h4>
             <ul className="footer-links">
-              <li><a href="#">About</a></li>
-              <li><a href="#">Journal</a></li>
-              <li><a href="#">Careers</a></li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/dashboard">Journal</Link></li>
+              <li><Link to="/join">Careers</Link></li>
             </ul>
           </div>
           
           <div className="footer-column">
             <h4 className="column-title">LEGAL</h4>
             <ul className="footer-links">
-              <li><a href="#">Privacy</a></li>
-              <li><a href="#">Terms</a></li>
-              <li><a href="#">Editorial Policy</a></li>
+              <li><Link to="/privacy">Privacy</Link></li>
+              <li><Link to="/terms">Terms</Link></li>
+              <li><Link to="/privacy">Editorial Policy</Link></li>
             </ul>
           </div>
         </div>
@@ -50,9 +51,9 @@ const Footer = () => {
       <div className="footer-bottom">
         <p className="copyright">&copy; 2024 Innova Manuscript. All rights reserved.</p>
         <div className="social-links">
-          <a href="#">Twitter</a>
-          <a href="#">LinkedIn</a>
-          <a href="#">Discord</a>
+          <a href="https://twitter.com" target="_blank" rel="noreferrer">Twitter</a>
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
         </div>
       </div>
     </footer>

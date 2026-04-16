@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Lightbulb, ShieldCheck, Compass } from 'lucide-react';
 import './Features.css';
 
@@ -32,7 +33,7 @@ const Features = () => {
               surface regardless of their origin.
             </p>
           </div>
-          <a href="#" className="view-features-link">View all features</a>
+          <Link to="/pricing" className="view-features-link">View all features</Link>
         </div>
         
         <div className="features-grid">

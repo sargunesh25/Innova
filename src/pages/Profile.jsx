@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Pencil, Award, Search, DollarSign, Users, Rocket, GraduationCap, Lock, Loader2 } from 'lucide-react';
 import { useDashboardInfo } from '../context/DashboardContext';
 import './Profile.css';
@@ -6,8 +6,12 @@ import './Profile.css';
 const iconMap = { Award, Search, DollarSign, Users, Rocket, GraduationCap, Lock };
 
 const Profile = () => {
-  const { profileData, isLoading } = useDashboardInfo();
+  const { profileData, isLoading, fetchProfileData } = useDashboardInfo();
   const [activeFilter, setActiveFilter] = useState('All');
+
+  useEffect(() => {
+    fetchProfileData();
+  }, [fetchProfileData]);
 
   if (isLoading || !profileData) {
     return (

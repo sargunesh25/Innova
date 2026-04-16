@@ -1,17 +1,77 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AlignLeft, Building2 } from 'lucide-react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { AlignLeft, Building2, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import './Join.css';
 
 const Join = () => {
-  const [accountType, setAccountType] = useState('researcher');
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialRole = searchParams.get('role') === 'company' ? 'company' : 'solver';
+  const [accountType, setAccountType] = useState(initialRole);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [localError, setLocalError] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const { register, authLoading, authError } = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Dummy login/signup logic
-    navigate('/dashboard');
+    setLocalError('');
+
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setLocalError('Please fill in all fields.');
+      return;
+    }
+    if (password.length < 8) {
+      setLocalError('Password must be at least 8 characters.');
+      return;
+    }
+
+    const result = await register({ name, email, password, role: accountType });
+    if (result.success) {
+      // Supabase sends a confirmation email — show the check-email screen
+      setEmailSent(true);
+    }
+    // authError in context will show server-side error
   };
+
+  const error = localError || authError;
+
+  // ─── Email confirmation screen ───────────────────────────────────────────
+  if (emailSent) {
+    return (
+      <div className="auth-page">
+        <div className="auth-form-container" style={{ textAlign: 'center', gap: '1rem' }}>
+          <div className="auth-pill">INNOVA MANUSCRIPT V.24</div>
+          <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>📬</div>
+          <h1 className="auth-title" style={{ fontSize: '1.8rem' }}>Check your inbox</h1>
+          <p className="auth-subtitle" style={{ maxWidth: '340px' }}>
+            We sent a confirmation link to <strong>{email}</strong>.<br />
+            Click it to activate your account, then sign in.
+          </p>
+          <Link
+            to="/login"
+            className="primary-btn"
+            style={{ display: 'inline-block', marginTop: '1.5rem', padding: '0.85rem 2rem', textDecoration: 'none' }}
+          >
+            Go to Sign In
+          </Link>
+          <p className="auth-terms" style={{ marginTop: '1rem' }}>
+            Didn't receive it? Check spam or{' '}
+            <span
+              style={{ color: 'var(--brand-green)', cursor: 'pointer', fontWeight: 600 }}
+              onClick={() => setEmailSent(false)}
+            >
+              try again
+            </span>.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="auth-page">
@@ -20,49 +80,92 @@ const Join = () => {
         <h1 className="auth-title">Join the collective</h1>
         <p className="auth-subtitle">Step into a space where technical precision meets historical elegance.</p>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="auth-type-selector">
-            <div 
-              className={`auth-type-card ${accountType === 'researcher' ? 'selected' : ''}`}
-              onClick={() => setAccountType('researcher')}
-            >
-              <AlignLeft className="auth-type-icon" size={20} />
-              <div className="auth-type-info">
-                <strong>Researcher</strong>
-                <span>MEMBER</span>
-              </div>
-            </div>
-            <div 
-              className={`auth-type-card ${accountType === 'company' ? 'selected' : ''}`}
-              onClick={() => setAccountType('company')}
-            >
-              <Building2 className="auth-type-icon" size={20} />
-              <div className="auth-type-info">
-                <strong>Company</strong>
-                <span>PARTNER</span>
-              </div>
+        {/* Role selector */}
+        <div className="auth-type-selector">
+          <div
+            className={`auth-type-card ${accountType === 'solver' ? 'selected' : ''}`}
+            onClick={() => setAccountType('solver')}
+          >
+            <AlignLeft className="auth-type-icon" size={20} />
+            <div className="auth-type-info">
+              <strong>Researcher</strong>
+              <span>MEMBER</span>
             </div>
           </div>
+          <div
+            className={`auth-type-card ${accountType === 'company' ? 'selected' : ''}`}
+            onClick={() => setAccountType('company')}
+          >
+            <Building2 className="auth-type-icon" size={20} />
+            <div className="auth-type-info">
+              <strong>Company</strong>
+              <span>PARTNER</span>
+            </div>
+          </div>
+        </div>
 
+        {/* Error Banner */}
+        {error && (
+          <div className="auth-error-banner">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-form-group">
             <label>FULL NAME</label>
-            <input type="text" placeholder="Julian V. Archer" defaultValue="Julian V. Archer" required />
+            <input
+              type="text"
+              placeholder={accountType === 'company' ? 'Company or contact name' : 'Your full name'}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+            />
           </div>
 
           <div className="auth-form-group">
             <label>EMAIL ADDRESS</label>
-            <input type="email" placeholder="archer@innova.org" defaultValue="archer@innova.org" required />
+            <input
+              type="email"
+              placeholder={accountType === 'company' ? 'admin@company.com' : 'you@innova.org'}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
           </div>
 
           <div className="auth-form-group">
             <label>SECURITY PASSWORD</label>
-            <input type="password" placeholder="••••••••••••" defaultValue="password123" required />
+            <input
+              type="password"
+              placeholder="Min. 8 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+            />
           </div>
 
-          <button type="submit" className="primary-btn full-width">CREATE ACCOUNT</button>
-          
+          <button
+            type="submit"
+            className="primary-btn full-width"
+            disabled={authLoading}
+          >
+            {authLoading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
+          </button>
+
           <p className="auth-terms">
-            By proceeding, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+            Already have an account?{' '}
+            <Link to="/login" style={{ color: 'var(--brand-green)', fontWeight: 600 }}>
+              Sign in
+            </Link>
+          </p>
+
+          <p className="auth-terms">
+            By proceeding, you agree to our <Link to="/terms">Terms</Link> and <Link to="/privacy">Privacy Policy</Link>.
           </p>
         </form>
       </div>

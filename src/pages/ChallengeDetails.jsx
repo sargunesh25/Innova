@@ -1,14 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, Download, Lock, ThumbsUp, MessageSquare, GitFork, Loader2 } from 'lucide-react';
 import { useDashboardInfo } from '../context/DashboardContext';
+import { api } from '../lib/api';
 import './ChallengeDetails.css';
+
+const normalizeChallenge = (c) => ({
+  id: c.id,
+  title: c.title,
+  description: c.description || c.summary || '',
+  host: {
+    name: c.company_name || c.poster?.name || c.host?.name || 'Innova Partner',
+    logoInitial: (c.company_name || c.poster?.name || c.host?.name || 'I').slice(0, 1).toUpperCase(),
+    verified: Boolean(c.poster?.verified || c.host?.verified || c.company_verified),
+    description: c.poster?.description || c.host?.description || 'Autonomous systems research',
+  },
+  problemStatement: c.problem_statement || c.summary || c.description || '',
+  problemDetail: c.problem_detail || c.details || '',
+  constraints: c.constraints || c.requirements || [],
+  judgingCriteria: (c.criteria || c.judging_criteria || []).map((item) => ({
+    title: item.title || item.name,
+    weight: item.weight || 0,
+    desc: item.desc || item.description || '',
+  })),
+  resources: c.resources || [],
+  submissions: Number(c.submission_count || 0),
+  participants: Number(c.participant_count || 0),
+  difficulty: c.difficulty || 'Open',
+  currentPhase: c.current_phase_label || c.current_phase || 'Open',
+  timeLeft: c.time_left || (c.days_remaining ? `${c.days_remaining} days remaining` : 'TBD'),
+  grandPrize: `₹${Number(c.prize_pool || c.prize || c.prize_value || 0).toLocaleString('en-IN')}`,
+  prizeType: c.prize_type || 'Prize pool',
+});
 
 const ChallengeDetails = () => {
   const { id } = useParams();
-  const { challengesList, isLoading } = useDashboardInfo();
+  const { challengesList, isLoading, fetchChallenges, followChallenge } = useDashboardInfo();
+  const [challengeData, setChallengeData] = useState(null);
+  const [followLoading, setFollowLoading] = useState(false);
+  const [followed, setFollowed] = useState(false);
 
-  if (isLoading) {
+  useEffect(() => {
+    let mounted = true;
+
+    api.get(`/api/challenges/${id}`)
+      .then((data) => {
+        if (mounted) setChallengeData(normalizeChallenge(data));
+      })
+      .catch(() => {
+        if (challengesList.length === 0) {
+          fetchChallenges();
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [id, challengesList.length, fetchChallenges]);
+
+  const handleFollow = async () => {
+    setFollowLoading(true);
+    const result = await followChallenge(Number(id));
+    if (result.success) setFollowed(true);
+    setFollowLoading(false);
+  };
+
+  if (isLoading && !challengeData) {
     return (
       <div className="challenge-details-page container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
         <Loader2 size={48} color="var(--brand-green)" style={{ animation: 'spin 2s linear infinite', marginBottom: '1rem' }} />
@@ -18,7 +75,7 @@ const ChallengeDetails = () => {
     );
   }
 
-  const challenge = challengesList.find(c => c.id === Number(id));
+  const challenge = challengeData || challengesList.find(c => c.id === Number(id));
 
   if (!challenge) {
     return (
@@ -30,7 +87,8 @@ const ChallengeDetails = () => {
     );
   }
 
-  const phaseIndex = challenge.currentPhase === 'Sealed' ? 1 : challenge.currentPhase === 'Evaluation' ? 2 : challenge.currentPhase === 'Completed' ? 3 : 0;
+  const currentPhase = challenge.currentPhase || 'Open';
+  const phaseIndex = currentPhase === 'Sealed' ? 1 : currentPhase === 'Evaluation' ? 2 : currentPhase === 'Completed' ? 3 : 0;
   const progressWidth = ((phaseIndex + 1) / 4) * 100;
 
   return (
@@ -51,8 +109,8 @@ const ChallengeDetails = () => {
 
           <div className="timeline-banner">
             <div className="timeline-banner-header">
-              <span className="current-phase-label">CURRENT PHASE : {challenge.currentPhase.toUpperCase()} PHASE</span>
-              <span className="time-left">{challenge.timeLeft}</span>
+              <span className="current-phase-label">CURRENT PHASE : {String(currentPhase).toUpperCase()} PHASE</span>
+              <span className="time-left">{challenge.timeLeft || 'TBD'}</span>
             </div>
             <div className="timeline-progress-bar">
               <div className="progress-fill" style={{ width: `${progressWidth}%` }}></div>
@@ -109,10 +167,10 @@ const ChallengeDetails = () => {
             <h2 className="section-heading bordered">Resources</h2>
             <div className="resources-list">
               {challenge.resources.map((res, i) => (
-                <div key={i} className="resource-item">
+                <a key={i} className="resource-item" href={res.url || '#'} target={res.url ? '_blank' : undefined} rel={res.url ? 'noreferrer' : undefined}>
                   <div className="resource-name">{res.name}</div>
                   <Download size={18} className="download-icon" />
-                </div>
+                </a>
               ))}
             </div>
           </section>
@@ -120,7 +178,7 @@ const ChallengeDetails = () => {
           <section className="detail-section submissions-section">
             <div className="submissions-header">
               <h2 className="section-heading bordered">Submissions</h2>
-              <span className="badge-dark">🔒 {challenge.currentPhase.toUpperCase()} PHASE</span>
+              <span className="badge-dark">🔒 {String(currentPhase).toUpperCase()} PHASE</span>
             </div>
 
             <div className="sealed-banner">
@@ -157,7 +215,7 @@ const ChallengeDetails = () => {
           <div className="stats-card">
             <div className="stat-row">
               <span className="stat-key">PHASE</span>
-              <span className="stat-val">{challenge.currentPhase}</span>
+              <span className="stat-val">{currentPhase}</span>
             </div>
             <div className="stat-row">
               <span className="stat-key">SUBMISSIONS</span>
@@ -171,10 +229,16 @@ const ChallengeDetails = () => {
               <span className="stat-key">DIFFICULTY</span>
               <span className="stat-val">{challenge.difficulty}</span>
             </div>
-            <Link to="/submit" className="full-width" style={{ display: 'block' }}>
+            <Link to={`/submit?challengeId=${challenge.id}`} className="full-width" style={{ display: 'block' }}>
               <button className="primary-btn full-width">Submit your idea</button>
             </Link>
-            <button className="outline-btn full-width mt-2">Follow updates</button>
+            <button
+              className={`outline-btn full-width mt-2 ${followed ? 'followed' : ''}`}
+              onClick={handleFollow}
+              disabled={followLoading || followed}
+            >
+              {followed ? '✓ Following' : followLoading ? 'Following...' : 'Follow updates'}
+            </button>
           </div>
 
           <div className="host-info-card">
@@ -183,7 +247,7 @@ const ChallengeDetails = () => {
               <div className="host-logo-small">{challenge.host.logoInitial}</div>
               <div className="host-text">
                 <div className="host-name-small">{challenge.host.name}</div>
-                <div className="host-desc-small">Autonomous systems research</div>
+                <div className="host-desc-small">{challenge.host.description}</div>
               </div>
             </div>
           </div>

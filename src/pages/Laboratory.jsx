@@ -1,19 +1,26 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Clock, Beaker, CheckCircle2, ChevronRight, FileText, Loader2 } from 'lucide-react';
 import { useDashboardInfo } from '../context/DashboardContext';
 import './Laboratory.css';
 
 const Laboratory = () => {
-  const { labSubmissions, isLoading } = useDashboardInfo();
+  const navigate = useNavigate();
+  const { labSubmissions, isLoading, fetchLabSubmissions } = useDashboardInfo();
   const [activeTab, setActiveTab] = useState('All Active');
 
+  useEffect(() => {
+    fetchLabSubmissions();
+  }, [fetchLabSubmissions]);
+
   const tabs = ['All Active', 'Drafts', 'Submitted', 'Completed'];
+  const normalizeStatus = (status) => String(status || '').toLowerCase();
 
   const filteredSubmissions = useMemo(() => {
     if (activeTab === 'All Active') return labSubmissions;
-    if (activeTab === 'Drafts') return labSubmissions.filter(s => s.status === 'Drafting');
-    if (activeTab === 'Submitted') return labSubmissions.filter(s => s.status === 'Submitted');
-    if (activeTab === 'Completed') return labSubmissions.filter(s => s.status === 'Under Evaluation' || s.progress === 100);
+    if (activeTab === 'Drafts') return labSubmissions.filter(s => normalizeStatus(s.status).includes('draft'));
+    if (activeTab === 'Submitted') return labSubmissions.filter(s => normalizeStatus(s.status).includes('submit'));
+    if (activeTab === 'Completed') return labSubmissions.filter(s => normalizeStatus(s.status).includes('evaluation') || normalizeStatus(s.status).includes('complete') || s.progress === 100);
     return labSubmissions;
   }, [labSubmissions, activeTab]);
 
@@ -52,8 +59,8 @@ const Laboratory = () => {
             <div key={sub.id} className="submission-track-card">
               <div className="track-left">
                 <div className="track-icon-wrapper">
-                  {sub.status === 'Drafting' ? <FileText size={24} color="#dfa838" /> :
-                   sub.status === 'Submitted' ? <CheckCircle2 size={24} color="#1a6d36" /> :
+                  {normalizeStatus(sub.status).includes('draft') ? <FileText size={24} color="#dfa838" /> :
+                   normalizeStatus(sub.status).includes('submit') ? <CheckCircle2 size={24} color="#1a6d36" /> :
                    <Beaker size={24} color="#6a40bf" />}
                 </div>
                 <div className="track-info">
@@ -78,12 +85,12 @@ const Laboratory = () => {
                       className="status-bar-fill" 
                       style={{ 
                         width: `${sub.progress}%`,
-                        backgroundColor: sub.status === 'Drafting' ? '#dfa838' : '#1a6d36'
+                        backgroundColor: normalizeStatus(sub.status).includes('draft') ? '#dfa838' : '#1a6d36'
                       }}
                     ></div>
                   </div>
                 </div>
-                <button className="continue-btn icon-btn">
+                <button className="continue-btn icon-btn" onClick={() => navigate(sub.challengeId ? `/submit?challengeId=${sub.challengeId}` : '/submit')}>
                   <ChevronRight size={20} />
                 </button>
               </div>

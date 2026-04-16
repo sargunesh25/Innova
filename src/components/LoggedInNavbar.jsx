@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Bell, LogOut, User } from 'lucide-react';
 import NotificationPanel from './NotificationPanel';
 import { useAuth } from '../context/AuthContext';
+import { useDashboardInfo } from '../context/DashboardContext';
 import './LoggedInNavbar.css';
 
 const LoggedInNavbar = () => {
@@ -11,8 +12,11 @@ const LoggedInNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
-  const { logout, userRole } = useAuth();
+  const { logout, userRole, user } = useAuth();
+  const { unreadCount } = useDashboardInfo();
   const dropdownRef = useRef(null);
+
+  const avatarUrl = user?.avatarUrl || null;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -47,13 +51,19 @@ const LoggedInNavbar = () => {
           <li><Link to="/about" className={path === '/about' ? 'active' : ''}>About</Link></li>
         </ul>
         <div className="nav-actions">
-          <button className="icon-btn" aria-label="Notifications" onClick={() => setIsNotifOpen(true)}>
+          <button className="icon-btn bell-btn" aria-label="Notifications" onClick={() => setIsNotifOpen(true)}>
             <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className="notif-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
+            )}
           </button>
           <div className="user-dropdown-container" ref={dropdownRef}>
             <button className="user-avatar-btn" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <div className="avatar-placeholder">
-                 <img src="/julian_avatar.png" alt="User Avatar" className="avatar-image" />
+                {avatarUrl
+                  ? <img src={avatarUrl} alt="User Avatar" className="avatar-image" />
+                  : <User size={18} color="var(--text-secondary)" />
+                }
               </div>
             </button>
             {isDropdownOpen && (

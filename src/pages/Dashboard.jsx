@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowUpRight, CheckCircle2, MoreHorizontal, Loader2, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboardInfo } from '../context/DashboardContext';
@@ -6,7 +6,20 @@ import './Dashboard.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { isLoading, error, userProfile, solverMetrics, activeChallenges, opportunities, journalLogs, rankings, applyToOpportunity } = useDashboardInfo();
+  const {
+    isLoading, error,
+    userProfile, solverMetrics, activeChallenges,
+    opportunities, journalLogs, rankings,
+    applyToOpportunity, fetchSolverDashboard
+  } = useDashboardInfo();
+
+  const mainOpportunities = opportunities.filter(o => o.displayType === 'featured_main');
+  const secondaryOpportunities = opportunities.filter(o => o.displayType !== 'featured_main');
+  const greetingName = userProfile?.firstName || userProfile?.name?.split(' ')[0] || 'Researcher';
+
+  useEffect(() => {
+    fetchSolverDashboard();
+  }, [fetchSolverDashboard]);
 
   if (isLoading || !solverMetrics || !userProfile) {
     return (
@@ -32,7 +45,7 @@ const Dashboard = () => {
       {/* Welcome Banner */}
       <div className="welcome-banner">
         <div className="welcome-text">
-          <h1>Good morning, {userProfile.firstName}</h1>
+          <h1>Good morning, {greetingName}</h1>
           <p>You're in the top <em>{userProfile.percentile}% of researchers</em> this month. Here's your impact overview for today.</p>
         </div>
         <div className="welcome-stats">
@@ -87,7 +100,7 @@ const Dashboard = () => {
           <section className="dashboard-section">
             <h2 className="section-title">Featured Opportunities</h2>
 
-            {opportunities.filter(o => o.id.startsWith('feat-')).map(opp => (
+            {mainOpportunities.map(opp => (
               <div key={opp.id} className="featured-card large-featured">
                 <div className="featured-image" style={{ backgroundImage: `url(${opp.image})` }}></div>
                 <div className="featured-content">
@@ -103,7 +116,7 @@ const Dashboard = () => {
             ))}
 
             <div className="featured-card-row">
-              {opportunities.filter(o => o.id.startsWith('sub-')).map(opp => (
+              {secondaryOpportunities.map(opp => (
                 <div key={opp.id} className={`featured-subcard ${opp.isHero ? 'solid-bg' : ''}`}>
                   {opp.isHero ? (
                     <div className="subcard-text-hero" dangerouslySetInnerHTML={{ __html: `<em>${opp.heroText}</em>` }}>

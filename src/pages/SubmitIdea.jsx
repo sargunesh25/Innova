@@ -1,10 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { UploadCloud, Plus, UserPlus, RotateCcw, ArrowRight } from 'lucide-react';
 import { useDashboardInfo } from '../context/DashboardContext';
+import { api } from '../lib/api';
 import './SubmitIdea.css';
 
 const SubmitIdea = () => {
-  const { submitIdea } = useDashboardInfo();
+  const { submitIdea, saveDraft, uploadAttachment } = useDashboardInfo();
+  const [searchParams] = useSearchParams();
+  const challengeId = searchParams.get('challengeId');
+  const fileInputRef = useRef(null);
+  const [attachments, setAttachments] = useState([]);
+  const [challenge, setChallenge] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -15,6 +22,11 @@ const SubmitIdea = () => {
   const [skills, setSkills] = useState(['Systems Design', 'Neural Arch']);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSaved, setLastSaved] = useState(new Date());
+
+  useEffect(() => {
+    if (!challengeId) return;
+    api.get(`/api/challenges/${challengeId}`).then(setChallenge).catch(() => setChallenge(null));
+  }, [challengeId]);
 
   const handleChange = useCallback((field) => (e) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
@@ -28,14 +40,30 @@ const SubmitIdea = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    setAttachments(prev => [...prev, ...files]);
+    setLastSaved(new Date());
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.concept.trim()) return;
     setIsSubmitting(true);
     try {
-      await submitIdea({ ...formData, skills });
-      alert('Idea submitted successfully!');
-      setFormData({ title: '', concept: '', impact: '', feasibility: '' });
+      const result = await submitIdea({ ...formData, skills, challengeId });
+      if (result.success) {
+        if (attachments.length > 0 && result.data?.id) {
+          await Promise.all(
+            attachments.map(file => uploadAttachment(result.data.id, file))
+          );
+        }
+        alert('Idea submitted successfully!');
+        setFormData({ title: '', concept: '', impact: '', feasibility: '' });
+        setAttachments([]);
+      } else {
+        alert(result.error || 'Submission failed.');
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -43,9 +71,11 @@ const SubmitIdea = () => {
     }
   };
 
-  const handleSaveDraft = () => {
-    console.log('Draft saved:', formData);
-    setLastSaved(new Date());
+  const handleSaveDraft = async () => {
+    const result = await saveDraft(null, { ...formData, skills, challengeId });
+    if (result.success) {
+      setLastSaved(new Date());
+    }
   };
 
   const formatTime = (d) => {
@@ -58,9 +88,11 @@ const SubmitIdea = () => {
         <div className="submit-pills">
           <div className="pill-challenge">
             <span className="pill-square-icon">A</span>
-            QUANTUM SYNTHESIS CHALLENGE
+            {challenge?.title || 'QUANTUM SYNTHESIS CHALLENGE'}
           </div>
-          <div className="pill-phase">PHASE 02: IDEATION</div>
+          <div className="pill-phase">
+            {challenge?.current_phase ? `PHASE ${challenge.current_phase}: IDEATION` : 'PHASE 02: IDEATION'}
+          </div>
         </div>
 
         <h1 className="submit-title">Submit your idea</h1>
@@ -97,12 +129,25 @@ const SubmitIdea = () => {
           <div className="form-group">
             <label className="form-label">MANUSCRIPT ATTACHMENTS</label>
             <p className="form-sublabel">Upload blueprints, diagrams, or supporting documentation (PDF, JPG, PNG).</p>
-            <div className="upload-box">
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".pdf,.jpg,.jpeg,.png"
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+            <div className="upload-box" onClick={() => fileInputRef.current?.click()} style={{ cursor: 'pointer' }}>
               <div className="upload-icon-wrapper">
                 <UploadCloud size={24} className="upload-icon" />
               </div>
               <p><strong>Click to upload</strong> or drag and drop files</p>
             </div>
+            {attachments.length > 0 && (
+              <ul style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                {attachments.map((f, i) => <li key={i}>- {f.name}</li>)}
+              </ul>
+            )}
           </div>
 
           <div className="skills-team-section">
@@ -121,7 +166,7 @@ const SubmitIdea = () => {
               <div className="team-avatars">
                 <div className="avatar-circle img-1"></div>
                 <div className="avatar-circle img-2"></div>
-                <button type="button" className="add-btn"><UserPlus size={14} /></button>
+                <button type="button" className="add-btn" title="Contributor search can be connected here next"><UserPlus size={14} /></button>
               </div>
             </div>
           </div>

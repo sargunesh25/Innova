@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Plus, ArrowRight, BookOpen, Loader2 } from 'lucide-react';
 import { useDashboardInfo } from '../context/DashboardContext';
 import './CompanyDashboard.css';
 
 const CompanyDashboard = () => {
-  const { isLoading, error, companyProfile, companyMetrics, operationalLedger } = useDashboardInfo();
+  const { isLoading, error, companyProfile, companyMetrics, operationalLedger, fetchCompanyDashboard, syncLedgerFilters } = useDashboardInfo();
+
+  useEffect(() => {
+    fetchCompanyDashboard();
+  }, [fetchCompanyDashboard]);
 
   if (isLoading || !companyProfile || !companyMetrics) {
     return (

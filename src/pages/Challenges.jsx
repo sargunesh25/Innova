@@ -73,6 +73,20 @@ const Challenges = () => {
     setAppliedSidebarCats(sidebarCats);
   };
 
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setSelectedPill('All Items');
+    setSortBy('Latest');
+
+    setMinPrize(0);
+    setSelectedPhase('');
+    setSidebarCats([]);
+
+    setAppliedMinPrize(0);
+    setAppliedPhase('');
+    setAppliedSidebarCats([]);
+  };
+
   if (isLoading) {
     return (
       <div className="challenges-page container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
@@ -136,8 +150,17 @@ const Challenges = () => {
             {filteredChallenges.length > 0 ? filteredChallenges.map((challenge) => (
               <Link to={`/challenge/${challenge.id}`} key={challenge.id} className="challenge-card-link">
                 <div className="challenge-card">
-                  <div className="card-top">
-                    <div className="card-logo-placeholder"></div>
+                  <div className="card-image-shell">
+                    {challenge.image ? (
+                      <img
+                        src={challenge.image}
+                        alt={challenge.title}
+                        className="card-image"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="card-image-fallback" aria-hidden="true">{challenge.host.logoInitial}</div>
+                    )}
                     <div className="card-tags">
                       <span className="tag-category">{challenge.category}</span>
                       <span className={`tag-time ${challenge.timeColor}`}>{challenge.timeLabel}</span>
@@ -164,7 +187,7 @@ const Challenges = () => {
             )) : (
               <div className="no-challenges-message">
                 <p>No challenges match your exact filter criteria.</p>
-                <button className="primary-btn clear-btn" onClick={() => { setSearchQuery(''); setSelectedPill('All Items'); }}>Clear Filters</button>
+                <button className="primary-btn clear-btn" onClick={handleClearFilters}>Clear Filters</button>
               </div>
             )}
           </div>

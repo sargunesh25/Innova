@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AlignLeft, Building2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -6,12 +6,18 @@ import './Join.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, authLoading, authError } = useAuth();
+  const { login, authLoading, authError, isAuthenticated } = useAuth();
 
   const [loginRole, setLoginRole] = useState('solver');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +30,7 @@ const Login = () => {
 
     const result = await login(email, password);
     if (result.success) {
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     }
     // authError in context will show the server error automatically
   };

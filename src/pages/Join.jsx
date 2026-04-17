@@ -46,18 +46,17 @@ const Join = () => {
       <div className="auth-page">
         <div className="auth-form-container" style={{ textAlign: 'center', gap: '1rem' }}>
           <div className="auth-pill">INNOVA MANUSCRIPT V.24</div>
-          <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>📬</div>
-          <h1 className="auth-title" style={{ fontSize: '1.8rem' }}>Check your inbox</h1>
+          <h1 className="auth-title" style={{ fontSize: '1.8rem' }}>Account created successfully</h1>
           <p className="auth-subtitle" style={{ maxWidth: '340px' }}>
-            We sent a confirmation link to <strong>{email}</strong>.<br />
-            Click it to activate your account, then sign in.
+            A verification email has been sent to <strong>{email}</strong>.<br />
+            Please verify your email to activate your account.
           </p>
           <Link
             to="/login"
             className="primary-btn"
             style={{ display: 'inline-block', marginTop: '1.5rem', padding: '0.85rem 2rem', textDecoration: 'none' }}
           >
-            Go to Sign In
+            Login
           </Link>
           <p className="auth-terms" style={{ marginTop: '1rem' }}>
             Didn't receive it? Check spam or{' '}

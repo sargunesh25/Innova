@@ -48,16 +48,6 @@ const Dashboard = () => {
           <h1>Good morning, {greetingName}</h1>
           <p>You're in the top <em>{userProfile.percentile}% of researchers</em> this month. Here's your impact overview for today.</p>
         </div>
-        <div className="welcome-stats">
-          <div className="banner-stat-box">
-            <span>CURRENT STREAK</span>
-            <strong>{solverMetrics.streak} Days</strong>
-          </div>
-          <div className="banner-stat-box">
-            <span>OPEN CHALLENGES</span>
-            <strong>{solverMetrics.openChallenges}</strong>
-          </div>
-        </div>
       </div>
 
 

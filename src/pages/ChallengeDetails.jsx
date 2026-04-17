@@ -9,6 +9,7 @@ const normalizeChallenge = (c) => ({
   id: c.id,
   title: c.title,
   description: c.description || c.summary || '',
+  image: c.image_url || c.image || '',
   host: {
     name: c.company_name || c.poster?.name || c.host?.name || 'Innova Partner',
     logoInitial: (c.company_name || c.poster?.name || c.host?.name || 'I').slice(0, 1).toUpperCase(),
@@ -60,7 +61,7 @@ const ChallengeDetails = () => {
 
   const handleFollow = async () => {
     setFollowLoading(true);
-    const result = await followChallenge(Number(id));
+    const result = await followChallenge(id);
     if (result.success) setFollowed(true);
     setFollowLoading(false);
   };
@@ -75,7 +76,7 @@ const ChallengeDetails = () => {
     );
   }
 
-  const challenge = challengeData || challengesList.find(c => c.id === Number(id));
+  const challenge = challengeData || challengesList.find((c) => String(c.id) === String(id));
 
   if (!challenge) {
     return (
@@ -106,6 +107,12 @@ const ChallengeDetails = () => {
           </div>
           <h1 className="details-title">{challenge.title}</h1>
           <p className="details-description">{challenge.description}</p>
+
+          {challenge.image ? (
+            <div className="details-hero-image-wrap">
+              <img src={challenge.image} alt={challenge.title} className="details-hero-image" />
+            </div>
+          ) : null}
 
           <div className="timeline-banner">
             <div className="timeline-banner-header">

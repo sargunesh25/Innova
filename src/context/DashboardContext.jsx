@@ -10,6 +10,7 @@ const mapChallenge = (c) => ({
   title: c.title,
   description: c.description || c.summary || '',
   category: c.category || 'Engineering',
+  image: c.image_url || c.image || '',
   subcategory: c.subcategory || c.category || 'General',
   timeLabel: c.days_remaining ? `${c.days_remaining}d Left` : (c.time_label || 'Live'),
   daysLeft: Number(c.days_remaining || c.days_left || 0),

@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { api } from '../lib/api';
+import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext();
 
@@ -13,6 +13,26 @@ const toApiRole = (role) => {
   if (role === 'company') return 'poster';
   if (role === 'solver') return 'contributor';
   return role || 'contributor';
+};
+
+const normalizeSupabaseUser = (supabaseUser) => {
+  if (!supabaseUser) return null;
+
+  const meta = supabaseUser.user_metadata || {};
+  const emailPrefix = (supabaseUser.email || '').split('@')[0];
+  const name = meta.name || meta.full_name || emailPrefix || 'Researcher';
+  const role = meta.role || 'contributor';
+
+  return {
+    id: supabaseUser.id,
+    email: supabaseUser.email,
+    username: meta.username || emailPrefix,
+    name,
+    full_name: name,
+    role: toUiRole(role),
+    firstName: name.split(' ')[0] || 'Researcher',
+    avatarUrl: meta.avatar_url || null,
+  };
 };
 
 const normalizeUser = (user) => {
@@ -36,9 +56,20 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
 
   const loadCurrentUser = useCallback(async () => {
+    setAuthLoading(true);
     try {
-      const me = await api.get('/api/users/me');
-      const normalized = normalizeUser(me);
+      const { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+
+      const normalized = normalizeSupabaseUser(data?.session?.user);
+      if (!normalized) {
+        setUser(null);
+        setUserRole('solver');
+        setSession(null);
+        setIsAuthenticated(false);
+        return null;
+      }
+
       setUser(normalized);
       setUserRole(normalized?.role || 'solver');
       setSession({ user: normalized });
@@ -60,14 +91,41 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     loadCurrentUser();
+
+    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      const normalized = normalizeSupabaseUser(nextSession?.user);
+
+      if (!normalized) {
+        setUser(null);
+        setUserRole('solver');
+        setSession(null);
+        setIsAuthenticated(false);
+        setAuthLoading(false);
+        return;
+      }
+
+      setUser(normalized);
+      setUserRole(normalized.role || 'solver');
+      setSession({ user: normalized });
+      setIsAuthenticated(true);
+      setAuthLoading(false);
+    });
+
+    return () => {
+      data.subscription.unsubscribe();
+    };
   }, [loadCurrentUser]);
 
   const login = useCallback(async (email, password) => {
     setAuthLoading(true);
     setAuthError(null);
     try {
-      const response = await api.post('/api/auth/login', { email, password });
-      const normalized = normalizeUser(response?.user || await loadCurrentUser());
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+
+      const normalized = normalizeSupabaseUser(data?.user || data?.session?.user);
+      if (!normalized) throw new Error('Login failed. Please try again.');
+
       setUser(normalized);
       setUserRole(normalized?.role || 'solver');
       setSession({ user: normalized });
@@ -80,18 +138,24 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setAuthLoading(false);
     }
-  }, [loadCurrentUser]);
+  }, []);
 
   const register = useCallback(async ({ name, email, password, role }) => {
     setAuthLoading(true);
     setAuthError(null);
     try {
-      await api.post('/api/auth/register', {
-        name,
+      const { error } = await supabase.auth.signUp({
         email,
         password,
-        role: toApiRole(role),
+        options: {
+          data: {
+            name,
+            full_name: name,
+            role: toApiRole(role),
+          },
+        },
       });
+      if (error) throw error;
       return { success: true };
     } catch (error) {
       setAuthError(error.message);
@@ -103,7 +167,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await api.post('/api/auth/logout', {});
+      await supabase.auth.signOut();
     } finally {
       setUser(null);
       setUserRole('solver');

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Decarbonised manufacturing workflow</title>
+  <desc id="desc">An industrial illustration with green energy and factory systems.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4efe3"/>
+      <stop offset="55%" stop-color="#dfe9dc"/>
+      <stop offset="100%" stop-color="#c8dfd1"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0f4d33"/>
+      <stop offset="100%" stop-color="#2d7a56"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1270" cy="170" r="96" fill="#f6c978" opacity=".9"/>
+  <path d="M0 690C140 610 300 600 450 640s290 66 456 10 324-82 694-12v262H0Z" fill="#d7e5d8"/>
+  <rect x="175" y="280" width="480" height="320" rx="26" fill="#163f2d"/>
+  <rect x="685" y="238" width="270" height="362" rx="26" fill="#f5f1e8"/>
+  <rect x="980" y="314" width="420" height="286" rx="26" fill="#f7f4ed"/>
+  <rect x="230" y="336" width="118" height="210" rx="12" fill="#d3e5d5"/>
+  <rect x="372" y="366" width="110" height="180" rx="12" fill="#8dc6a3"/>
+  <rect x="506" y="316" width="86" height="230" rx="12" fill="#53a173"/>
+  <path d="M760 500h118l58-106 58 106h118" fill="none" stroke="url(#panel)" stroke-linecap="round" stroke-linejoin="round" stroke-width="28"/>
+  <rect x="748" y="326" width="152" height="30" rx="15" fill="#eadfc8"/>
+  <rect x="1040" y="370" width="300" height="28" rx="14" fill="#d2e0d1"/>
+  <rect x="1040" y="424" width="256" height="28" rx="14" fill="#e8dcc3"/>
+  <rect x="1040" y="478" width="214" height="28" rx="14" fill="#d2e0d1"/>
+  <path d="M315 250c64-118 142-118 206 0" fill="none" stroke="#2b8b57" stroke-linecap="round" stroke-width="24"/>
+  <circle cx="418" cy="182" r="38" fill="#2b8b57"/>
+  <path d="M418 154c16 12 26 30 26 50-26 2-46-4-61-18 4-16 15-27 35-32Z" fill="#d4ebdd"/>
+</svg>
